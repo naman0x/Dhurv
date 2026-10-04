@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DHRUV · FoodSafe — NCSC 2026–27 Food &amp; Hygiene Study by Dhruv Yadav</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Serif+JP:wght@400;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!-- Fixed 2D Food & Hygiene Atmospheric Backdrop + Subtle 3D WebGL Layer -->
+  <div class="backdrop-stage" aria-hidden="true">
+    <div class="backdrop-2d-photo" id="backdrop-2d-photo"></div>
+    <div class="backdrop-gradient-veil"></div>
+  </div>
+
+  <!-- Lightweight 3D WebGL Canvas (Floating 3D Water Droplets, Vitality Orbs & 3D Parallax) -->
+  <canvas id="kage-canvas" aria-label="Interactive 3D pure water droplets and food hygiene atmosphere"></canvas>
+
+  <!-- Fixed Editorial Top Navigation -->
+  <header class="site-header">
+    <a href="#prologue" class="brand-lockup" aria-label="DHRUV FoodSafe Home">
+      <span class="brand-seal" aria-hidden="true">🥗</span>
+      <span class="brand-text">
+        <span class="brand-title">DHRUV · FOODSAFE</span>
+        <span class="brand-sub">NCSC 2026–27 · CLASS XI SCIENCE PROJECT</span>
+      </span>
+    </a>
+
+    <nav class="site-nav" aria-label="Primary Navigation">
+      <a href="#prologue" class="nav-link is-active" data-section="0">OVERVIEW</a>
+      <a href="#threshold" class="nav-link" data-section="1">WHY IT MATTERS</a>
+      <a href="#gardens" class="nav-link" data-section="2">WHO 5 KEYS</a>
+      <a href="#research" class="nav-link" data-section="3">RESEARCH</a>
+      <span class="nav-divider" aria-hidden="true">|</span>
+      <a href="#lab-guide" class="nav-link nav-lab" data-section="4">GUIDE &amp; VIDEOS</a>
+      <a href="#lab-health" class="nav-link nav-lab" data-section="5">HEALTH &amp; CHECKS</a>
+      <a href="#lab-quiz" class="nav-link nav-lab" data-section="6">QUIZ &amp; GAMES</a>
+      <a href="#lab-survey" class="nav-link nav-lab" data-section="7">SURVEY DATA</a>
+      <a href="#lab-challenge" class="nav-link nav-cta" data-section="8">7-DAY CHALLENGE</a>
+    </nav>
+  </header>
+
+  <!-- Fixed Live NCSC Telemetry Pill (Bottom Center) -->
+  <div class="alley-hud" aria-live="polite">
+    <span class="hud-dot"></span>
+    <span class="hud-metric" id="hud-depth">NCSC 2026–27 · DHRUV YADAV</span>
+    <span class="hud-sep">·</span>
+    <span class="hud-metric" id="hud-gate">SECTION 01 / 09</span>
+    <span class="hud-sep hud-hide-mobile">·</span>
+    <span class="hud-hint hud-hide-mobile" id="hud-mode">FOOD &amp; HYGIENE AWARENESS PLATFORM</span>
+  </div>
+
+  <!-- Main Scroll Container -->
+  <main class="scroll-container" id="scroll-container">
+
+    <!-- =====================================================================
+         SECTION 01 : HERO — MONUMENTAL "D H R U V" & WHO GLOBAL BURDEN
+         ===================================================================== -->
+    <section class="chapter chapter-prologue" id="prologue" data-nav-idx="0">
+
+      <!-- Unobstructed Monumental "D H R U V" Centerpiece (Slides up smoothly on scroll) -->
+      <div class="dhruv-monument-wrap" id="dhruv-monument" aria-label="DHRUV Food and Hygiene Project">
+        <div class="dhruv-monument-tag">
+          <span>NATIONAL CHILDREN’S SCIENCE CONGRESS (NCSC 2026–27) · THEME: FOOD &amp; HYGIENE</span>
+        </div>
+        <div class="dhruv-letters" role="heading" aria-level="1">
+          <span class="dhruv-char" data-char="D">D</span>
+          <span class="dhruv-char" data-char="H">H</span>
+          <span class="dhruv-char" data-char="R">R</span>
+          <span class="dhruv-char" data-char="U">U</span>
+          <span class="dhruv-char" data-char="V">V</span>
+        </div>
+        <div class="dhruv-monument-sub">
+          <span>FOOD AND HYGIENE HABITS AMONGST PEOPLE: SURVEY, ANALYSIS &amp; AWARENESS STUDY · CLASS XI</span>
+        </div>
+      </div>
+
+      <!-- Hero Content Row Below Monumental Title (Zero Overlap!) -->
+      <div class="prologue-top">
+        <div class="prologue-copy">
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            <span>NCSC SCIENCE PROJECT · BY DHRUV YADAV (CLASS XI)</span>
+          </div>
+          <h2 class="hero-headline">
+            IS YOUR FOOD<br />
+            <span class="text-crimson">REALLY SAFE?</span>
+          </h2>
+          <p class="hero-lead">
+            “Food safety doesn't begin at the restaurant. It begins with our everyday habits.”
+            Explore the science of food hygiene, test your habits, and inspect our survey findings.
+          </p>
+
+          <!-- Animated 4-Stage Risk-to-Safety Mini Flow -->
+          <div class="hero-flow-strip" aria-label="Journey from risk to safety">
+            <div class="flow-step">
+              <span class="flow-emoji">🖐️</span>
+              <span class="flow-label">Dirty Hands</span>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">
+              <span class="flow-emoji">🦠</span>
+              <span class="flow-label">Contamination</span>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">
+              <span class="flow-emoji">💧</span>
+              <span class="flow-label">Handwashing</span>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step is-safe">
+              <span class="flow-emoji">🥗</span>
+              <span class="flow-label">Safe Food</span>
+            </div>
+          </div>
+
+          <div class="hero-actions">
+            <a href="#lab-guide" class="btn-vermilion">LEARN SAFE HABITS ↓</a>
+            <a href="#lab-quiz" class="btn-glass">TAKE HYGIENE QUIZ →</a>
+          </div>
+        </div>
+
+        <!-- Right Visual Card: Fresh Produce & Clean Water -->
+        <div class="hero-visual-feature">
+          <div class="visual-feature-card">
+            <img src="./assets/hero-fresh-produce.jpg" alt="Fresh colourful vegetables and salad greens prepared hygienically" />
+            <div class="visual-feature-caption">
+              <span class="visual-badge">WHO GLOBAL HEALTH STANDARD</span>
+              <p>Clean hands, safe water, and fresh ingredients prevent foodborne disease before it starts.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Bottom Row: WHO Global Burden Counters + Quick Preview Widget -->
+      <div class="prologue-bottom">
+        <div class="hero-who-stats">
+          <div class="who-stat-card">
+            <div class="stat-value"><span data-count="866" data-pad="3">866</span>M+</div>
+            <div class="stat-label">FOODBORNE ILLNESSES</div>
+            <div class="stat-desc">Annual global estimate (WHO)</div>
+          </div>
+          <div class="who-stat-card">
+            <div class="stat-value">1.52M</div>
+            <div class="stat-label">ANNUAL DEATHS</div>
+            <div class="stat-desc">Global burden · High impact under age 5</div>
+          </div>
+          <div class="who-stat-card">
+            <div class="stat-value" data-count="42" data-pad="2">42</div>
+            <div class="stat-label">MAJOR HAZARDS STUDIED</div>
+            <div class="stat-desc">WHO global foodborne estimates</div>
+          </div>
+        </div>
+
+        <div class="hero-preview-widget">
+          <a href="#threshold" class="widget-card" aria-label="Scroll to Why Food Hygiene Matters">
+            <img src="./assets/separate-boards.jpg" alt="Clean modern kitchen food preparation" />
+            <div class="widget-card-overlay">
+              <span class="widget-tag">EXPLORE THE SAFETY CHAIN ↓</span>
+              <span class="widget-play" aria-hidden="true">▶</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECTION 02 : WHY FOOD HYGIENE MATTERS & THE 5-STAGE FOOD SAFETY CHAIN
+         ===================================================================== -->
+    <section class="chapter chapter-threshold" id="threshold" data-nav-idx="1">
+      <div class="threshold-grid">
+        <div class="alley-side-card">
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            <span>01 / WHY FOOD HYGIENE MATTERS</span>
+          </div>
+          <h2 class="section-headline">
+            FOOD SAFETY IS A<br />
+            CHAIN. ONE WEAK<br />
+            STEP CREATES RISK.
+          </h2>
+          <p class="lore-primary" style="margin-top: 1rem;">
+            From farm and market to kitchen counter and dining plate, food passes
+            through five critical stages. A single lapse in hand hygiene, water quality,
+            or storage temperature compromises the entire chain.
+          </p>
+
+          <!-- The 5-Stage Food Safety Chain -->
+          <div class="chain-pills-wrap">
+            <div class="chain-caption">THE 5-STAGE FOOD SAFETY CHAIN</div>
+            <div class="chain-pills">
+              <span class="chain-pill">01 Preparation</span>
+              <span class="chain-arrow">→</span>
+              <span class="chain-pill">02 Cooking</span>
+              <span class="chain-arrow">→</span>
+              <span class="chain-pill">03 Storage</span>
+              <span class="chain-arrow">→</span>
+              <span class="chain-pill">04 Serving</span>
+              <span class="chain-arrow">→</span>
+              <span class="chain-pill is-highlight">05 Consumption</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="threshold-photo-card">
+          <img src="./assets/handwashing-hygiene.jpg" alt="Fresh nutrient-rich bowl of washed vegetables, avocado, tomatoes and greens" />
+          <div class="photo-card-overlay">
+            <span class="panel-badge">FARM TO PLATE PROTECTION</span>
+            <p>Strong habits at every stage — washing, cooking, chilling, and covering — keep the entire chain safe.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Core Pillar Cards -->
+      <div class="stats-row">
+        <div class="stat-item">
+          <div class="stat-value">🦠 01</div>
+          <div class="stat-label">CONTAMINATION</div>
+          <div class="stat-desc">Harmful biological, chemical or physical agents can enter food at any stage.</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">🤢 02</div>
+          <div class="stat-label">FOODBORNE ILLNESS</div>
+          <div class="stat-desc">Unsafe food can cause vomiting, diarrhoea, abdominal pain and fever.</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">🏠 03</div>
+          <div class="stat-label">EVERYDAY RISK</div>
+          <div class="stat-desc">Food safety matters at home, school, restaurants and street-food stalls.</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">❤️ 04</div>
+          <div class="stat-label">PREVENTION</div>
+          <div class="stat-desc">Most critical preventive actions are simple, consistent daily habits.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECTION 03 : HOW DOES FOOD BECOME CONTAMINATED? (3 VECTORS)
+         ===================================================================== -->
+    <section class="chapter chapter-corridor" id="corridor" data-nav-idx="1">
+      <div class="threshold-grid">
+        <div class="threshold-photo-card">
+          <img src="./assets/clean-water-glass.jpg" alt="Crystal clear safe drinking water pouring into a clean glass" />
+          <div class="photo-card-overlay">
+            <span class="panel-badge">TRANSMISSION FLOW</span>
+            <p><strong>Source → Food → Human → Health Risk:</strong> Breaking the chain through clean water, covering food, and temperature control protects health.</p>
+          </div>
+        </div>
+
+        <article class="alley-side-card">
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            <span>02 / CONTAMINATION VECTORS</span>
+          </div>
+          <h2 class="section-headline">
+            THREE WAYS FOOD<br />
+            BECOMES UNSAFE.
+          </h2>
+          <p class="lore-primary" style="margin-top: 0.9rem;">
+            Breaking the transmission flow (<strong>Source → Food → Human → Health Risk</strong>)
+            requires targeting all three classes of food contamination:
+          </p>
+
+          <div class="hazard-stack">
+            <div class="hazard-row">
+              <span class="hazard-icon">🦠</span>
+              <div>
+                <h3 class="hazard-title">01 · BIOLOGICAL CONTAMINATION</h3>
+                <p class="hazard-desc">Bacteria, viruses and parasites — the leading cause of foodborne illness worldwide.</p>
+                <p class="hazard-prev"><strong>Prevention:</strong> Cook thoroughly, keep clean, separate raw &amp; cooked, chill promptly.</p>
+              </div>
+            </div>
+
+            <div class="hazard-row">
+              <span class="hazard-icon">🧪</span>
+              <div>
+                <h3 class="hazard-title">02 · CHEMICAL CONTAMINATION</h3>
+                <p class="hazard-desc">Pesticide residues, unwashed produce, unsafe water, or leached container toxins.</p>
+                <p class="hazard-prev"><strong>Prevention:</strong> Use clean water, rinse produce under running water, use food-grade storage.</p>
+              </div>
+            </div>
+
+            <div class="hazard-row">
+              <span class="hazard-icon">🧱</span>
+              <div>
+                <h3 class="hazard-title">03 · PHYSICAL CONTAMINATION</h3>
+                <p class="hazard-desc">Dust, hair, insects, or foreign fragments entering uncovered meals.</p>
+                <p class="hazard-prev"><strong>Prevention:</strong> Keep food covered with lids/nets and inspect ingredients before cooking.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECTION 04 : WHO 5 GOLDEN RULES & FOOD PHOTOGRAPHY BENTO GRID
+         ===================================================================== -->
+    <section class="chapter chapter-gardens" id="gardens" data-nav-idx="2">
+      <div class="gardens-header-bar">
+        <div class="eyebrow">
+          <span class="eyebrow-dot"></span>
+          <span>03 / WHO FIVE KEYS TO SAFER FOOD</span>
+        </div>
+        <span class="gardens-caption">WORLD HEALTH ORGANIZATION GLOBAL STANDARD</span>
+      </div>
+
+      <!-- Signature Bento Grid with Authentic Food Hygiene Photography -->
+      <div class="gardens-bento">
+        <!-- Left Interactive Card: WHO 5 Golden Rules -->
+        <article class="bento-card bento-main">
+          <div class="bento-card-topbar">
+            <span class="bento-index">WHO GUIDELINES / 5 GOLDEN RULES</span>
+            <span class="bento-jp">TAP EACH RULE BELOW</span>
+          </div>
+          <div class="bento-media">
+            <img src="./assets/street-food-safety.jpg" alt="Hygienically prepared and plated healthy meal" />
+          </div>
+          <div class="bento-who-rules" id="who-rules-widget">
+            <div class="who-tabs" role="tablist">
+              <button type="button" class="who-tab is-active" data-rule="0">1. Keep Clean</button>
+              <button type="button" class="who-tab" data-rule="1">2. Separate</button>
+              <button type="button" class="who-tab" data-rule="2">3. Cook</button>
+              <button type="button" class="who-tab" data-rule="3">4. Safe Temp</button>
+              <button type="button" class="who-tab" data-rule="4">5. Safe Water</button>
+            </div>
+            <div class="who-rule-detail" id="who-rule-detail">
+              <div class="who-rule-header">
+                <span class="who-rule-icon" id="who-rule-icon">🧼</span>
+                <div>
+                  <span class="who-rule-num" id="who-rule-num">RULE 01 / WHO FIVE KEYS</span>
+                  <h3 class="bento-title" id="who-rule-title">KEEP CLEAN</h3>
+                </div>
+              </div>
+              <p class="who-rule-line"><strong>Why:</strong> <span id="who-rule-why">Wash hands and keep surfaces and utensils clean so microbes don't transfer to food.</span></p>
+              <p class="who-rule-line"><strong>Example:</strong> <span id="who-rule-example">Wash hands with soap for 20s before preparing food and after handling raw meat.</span></p>
+              <p class="who-rule-line"><strong>Daily Action:</strong> <span id="who-rule-action">Make handwashing a fixed routine before every meal and cooking session.</span></p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Right Stacked Split Cards: Cross-Contamination & Danger Zone -->
+        <div class="bento-stack">
+          <article class="bento-card bento-split">
+            <div class="bento-split-info">
+              <div class="bento-split-top">
+                <span class="bento-dot"></span>
+                <span class="bento-index">CROSS-CONTAMINATION PREVENTION</span>
+              </div>
+              <div class="cross-chain-mini">
+                <span>🍗 Raw</span><span>→</span><span>🔪 Knife</span><span>→</span><span>🪵 Board</span><span>→</span><span>🍲 Meal</span>
+              </div>
+              <div class="bento-split-bottom">
+                <div>
+                  <h3 class="bento-title">SEPARATE RAW &amp; COOKED</h3>
+                  <p class="bento-sub">Use dedicated cutting boards and store raw meat below cooked food in the fridge.</p>
+                </div>
+                <span class="bento-badge">KEY 02</span>
+              </div>
+            </div>
+            <div class="bento-split-media">
+              <img src="./assets/separate-boards.jpg" alt="Clean kitchen counter with separate utensils and fresh lemons" />
+            </div>
+          </article>
+
+          <article class="bento-card bento-split">
+            <div class="bento-split-info">
+              <div class="bento-split-top">
+                <span class="bento-dot"></span>
+                <span class="bento-index">THERMAL DANGER ZONE</span>
+              </div>
+              <div class="cross-chain-mini">
+                <span>❄️ &lt;5°C Safe</span><span>·</span><span class="text-crimson">⚠️ 5°C–60°C Rapid Growth</span><span>·</span><span>🔥 &gt;60°C</span>
+              </div>
+              <div class="bento-split-bottom">
+                <div>
+                  <h3 class="bento-title">5°C TO 60°C DANGER ZONE</h3>
+                  <p class="bento-sub">Refrigerate perishables within 2 hours; reheat leftovers until steaming hot.</p>
+                </div>
+                <span class="bento-badge">KEY 04</span>
+              </div>
+            </div>
+            <div class="bento-split-media">
+              <img src="./assets/safe-cooking-temp.jpg" alt="Cooking food thoroughly in a clean kitchen" />
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECTION 05 : NCSC RESEARCH METHODOLOGY & PROJECT IDENTITY
+         ===================================================================== -->
+    <section class="chapter chapter-rituals" id="research" data-nav-idx="3">
+      <div class="rituals-header">
+        <div>
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            <span>04 / NCSC RESEARCH &amp; METHODOLOGY</span>
+          </div>
+          <h2 class="section-headline">
+            RESEARCH BEHIND<br />
+            THIS PLATFORM.
+          </h2>
+        </div>
+        <p class="rituals-lead">
+          Developed as the practical digital awareness component of the <strong>National Children’s Science Congress (NCSC 2026–27)</strong> study:
+          <em>“Food and Hygiene Habits Amongst People: Survey, Analysis and Awareness Study.”</em>
+        </p>
+      </div>
+
+      <div class="chapters-grid">
+        <article class="ritual-card ritual-card-wide">
+          <div class="ritual-card-top">
+            <span class="ritual-num">01 · PROBLEM &amp; METHOD</span>
+            <span class="ritual-tag">DESCRIPTIVE SURVEY</span>
+          </div>
+          <div class="ritual-card-body">
+            <h3 class="ritual-title">Research Problem &amp; Questionnaire</h3>
+            <p class="ritual-desc">
+              <strong>Problem:</strong> Public awareness and everyday food-hygiene behaviour do not always match.<br />
+              <strong>Method:</strong> Structured questionnaire-based descriptive survey examining hand hygiene, produce washing, food covering, expiry checks, raw/cooked separation, and street-food evaluation.
+            </p>
+          </div>
+          <div class="ritual-card-foot">
+            <span class="ritual-duration">SURVEY → ANALYSIS → AWARENESS → ACTION</span>
+          </div>
+        </article>
+
+        <article class="ritual-card ritual-card-wide">
+          <div class="ritual-card-top">
+            <span class="ritual-num">02 · ANALYSIS &amp; ETHICS</span>
+            <span class="ritual-tag">QUANTITATIVE STUDY</span>
+          </div>
+          <div class="ritual-card-body">
+            <h3 class="ritual-title">Data Analysis &amp; Scientific Integrity</h3>
+            <p class="ritual-desc">
+              <strong>Analysis:</strong> Frequency distributions, percentage comparisons, cross-tabulations, and visual charts.<br />
+              <strong>Note:</strong> This platform does not claim behaviour improved unless a formal before/after evaluation is conducted.
+            </p>
+          </div>
+          <div class="ritual-card-foot">
+            <a href="#lab-survey" class="ritual-duration" style="text-decoration:none;">↗ JUMP TO LIVE SURVEY CHARTS BELOW</a>
+          </div>
+        </article>
+
+        <!-- NCSC Project Metadata Cards -->
+        <article class="ritual-card">
+          <div class="ritual-card-top">
+            <span class="ritual-num">STUDENT RESEARCHER</span>
+            <span class="ritual-tag">CLASS XI</span>
+          </div>
+          <div class="ritual-card-body">
+            <h3 class="ritual-title">Dhruv Yadav</h3>
+            <p class="ritual-desc">Student Researcher · Class XI · Session 2026–27 · National Children’s Science Congress (NCSC).</p>
+          </div>
+          <div class="ritual-card-foot">
+            <span class="ritual-duration">MADE BY DHRUV YADAV</span>
+          </div>
+        </article>
+
+        <article class="ritual-card">
+          <div class="ritual-card-top">
+            <span class="ritual-num">PROJECT THEME</span>
+            <span class="ritual-tag">PUBLIC HEALTH</span>
+          </div>
+          <div class="ritual-card-body">
+            <h3 class="ritual-title">Food &amp; Hygiene</h3>
+            <p class="ritual-desc">Translating empirical survey findings into an interactive awareness and habit-building digital platform.</p>
+          </div>
+          <div class="ritual-card-foot">
+            <span class="ritual-duration">SMALL HABITS · SAFER FOOD</span>
+          </div>
+        </article>
+
+        <article class="ritual-card">
+          <div class="ritual-card-top">
+            <span class="ritual-num">INTERACTIVE LAB</span>
+            <span class="ritual-tag">15+ TOOLS BELOW</span>
+          </div>
+          <div class="ritual-card-body">
+            <h3 class="ritual-title">Explore Interactive Tools</h3>
+            <p class="ritual-desc">Scroll down to access the 3-Level Guide, Animated Storyboards, Quiz, Body Map, Survey Charts &amp; 7-Day Challenge.</p>
+          </div>
+          <div class="ritual-card-foot">
+            <a href="#lab-guide" class="ritual-duration" style="text-decoration:none;">↓ SCROLL TO INTERACTIVE LAB</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         PART II — THE INTERACTIVE FOODSAFE LAB (HIGH-CONTRAST READABILITY)
+         ===================================================================== -->
+    <div class="lab-wrapper" id="act-lab">
+
+      <!-- Threshold Divider Banner -->
+      <div class="lab-threshold-banner">
+        <div class="eyebrow">
+          <span class="eyebrow-dot"></span>
+          <span>INTERACTIVE AWARENESS &amp; HABIT-BUILDING LAB</span>
+        </div>
+        <h2 class="section-headline">EXPLORE, TEST &amp; PRACTICE SAFE HABITS</h2>
+        <p class="hero-lead">Interactive learning tools, animated storyboards, quizzes, checklists, and live NCSC survey visualisations.</p>
+      </div>
+
+      <!-- ===================================================================
+           LAB MODULE 01 : "DO YOU KNOW?" CAROUSEL, 3-LEVEL GUIDE & STORYBOARDS
+           =================================================================== -->
+      <section class="lab-section" id="lab-guide" data-nav-idx="4">
+        <div class="lab-grid-2col">
+
+          <!-- Left: "Do You Know? 🤔" 6-Fact Interactive Carousel -->
+          <div class="glass-panel">
+            <div class="panel-header">
+              <div>
+                <span class="panel-eyebrow">INTERACTIVE AWARENESS DECK</span>
+                <h3 class="panel-title">Do You Know? 🤔</h3>
+              </div>
+              <span class="panel-badge" id="fact-counter">FACT 01 / 06</span>
+            </div>
+
+            <div class="fact-carousel-body" id="fact-carousel-body">
+              <h4 class="fact-headline" id="fact-title">Food can look completely normal and still be contaminated.</h4>
+              <div class="fact-detail-box">
+                <p class="fact-point"><strong class="text-shoji">⚠️ Why it matters:</strong> <span id="fact-why">Harmful microbes often do not change the smell, taste or appearance of food.</span></p>
+                <p class="fact-point"><strong class="text-crimson">✅ What you can do:</strong> <span id="fact-do">Don't judge safety by looks alone — follow safe handling, storage and time limits.</span></p>
+              </div>
+            </div>
+
+            <div class="panel-footer">
+              <div class="carousel-dots" id="fact-dots"></div>
+              <div class="carousel-btns">
+                <button type="button" class="btn-glass-sm" id="fact-prev">← PREV</button>
+                <button type="button" class="btn-vermilion-sm" id="fact-next">NEXT FACT →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: 🎬 Watch & Learn — 5 Animated Storyboard Cards -->
+          <div class="glass-panel">
+            <div class="panel-header">
+              <div>
+                <span class="panel-eyebrow">WATCH &amp; LEARN · 30–60S CONCEPTS</span>
+                <h3 class="panel-title">🎬 Animated Hygiene Storyboards</h3>
+              </div>
+              <span class="panel-badge">5 STORYBOARDS</span>
+            </div>
+
+            <div class="storyboard-list" id="storyboard-list">
+              <!-- Populated by app.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Full-Width: Gamified 3-Level Unlockable Food Hygiene Guide -->
+        <div class="glass-panel" style="margin-top: 1.5rem;">
+          <div class="panel-header">
+            <div>
+              <span class="panel-eyebrow">GAMIFIED LEARNING PATH</span>
+              <h3 class="panel-title">3-Level Unlockable Food Hygiene Guide</h3>
+              <p class="panel-sub">Complete each level from Basic Habits to Smart Consumer Behaviour to unlock the next tier.</p>
+            </div>
+            <div class="level-progress-pills" id="level-pills">
+              <button type="button" class="level-pill is-unlocked is-active" data-level="1">LEVEL 01 · BASIC</button>
+              <button type="button" class="level-pill" data-level="2">🔒 LEVEL 02 · INTERMEDIATE</button>
+              <button type="button" class="level-pill" data-level="3">🔒 LEVEL 03 · ADVANCED</button>
+            </div>
+          </div>
+
+          <div class="guide-levels-container" id="guide-levels-container">
+            <!-- Populated by app.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           LAB MODULE 02 : INTERACTIVE BODY MAP, SETTINGS CHECKLISTS & SCENARIO GAME
+           =================================================================== -->
+      <section class="lab-section" id="lab-health" data-nav-idx="5">
+        <div class="lab-grid-2col">
+
+          <!-- Left: ❤️ Food Hygiene & Your Health — Interactive SVG Body Map -->
+          <div class="glass-panel">
+            <div class="panel-header">
+              <div>
+                <span class="panel-eyebrow">CLINICAL IMPACT EXPLORER</span>
+                <h3 class="panel-title">❤️ Food Hygiene &amp; Your Health</h3>
+                <p class="panel-sub">Click a glowing anatomical hotspot to inspect how foodborne pathogens affect the human body.</p>
+              </div>
+              <span class="panel-badge" id="body-active-badge">STOMACH</span>
+            </div>
+
+            <div class="body-map-grid">
+              <div class="body-svg-stage">
+                <svg viewBox="0 0 200 300" class="body-svg" aria-label="Interactive human body diagram">
+                  <!-- Head -->
+                  <ellipse cx="100" cy="44" rx="25" ry="29" class="body-outline" />
+                  <!-- Torso -->
+                  <path d="M68 80 Q100 68 132 80 L142 165 Q100 178 58 165 Z" class="body-outline" />
+                  <!-- Lower body -->
+                  <rect x="82" y="172" width="36" height="84" rx="14" class="body-outline" />
+                  <!-- Arms -->
+                  <rect x="46" y="88" width="19" height="64" rx="9" class="body-outline" />
+                  <rect x="135" y="88" width="19" height="64" rx="9" class="body-outline" />
+
+                  <!-- Hotspot 1: Whole Body / Systemic (y=92) -->
+                  <g class="body-hotspot" data-organ="body" tabindex="0" role="button" aria-label="Whole body systemic effects">
+                    <circle cx="100" cy="92" r="15" class="hotspot-pulse" />
+                    <circle cx="100" cy="92" r="8" class="hotspot-core" />
+                  </g>
+
+                  <!-- Hotspot 2: Stomach (y=148) -->
+                  <g class="body-hotspot is-active" data-organ="stomach" tabindex="0" role="button" aria-label="Stomach effects">
+                    <circle cx="100" cy="148" r="15" class="hotspot-pulse" />
+                    <circle cx="100" cy="148" r="8" class="hotspot-core" />
+                  </g>
+
+                  <!-- Hotspot 3: Intestine (y=212) -->
+                  <g class="body-hotspot" data-organ="intestine" tabindex="0" role="button" aria-label="Intestine effects">
+                    <circle cx="100" cy="212" r="15" class="hotspot-pulse" />
+                    <circle cx="100" cy="212" r="8" class="hotspot-core" />
+                  </g>
+                </svg>
+              </div>
+
+              <div class="body-info-pane">
+                <div class="organ-tabs">
+                  <button type="button" class="organ-tab" data-organ="body">Whole Body</button>
+                  <button type="button" class="organ-tab is-active" data-organ="stomach">Stomach</button>
+                  <button type="button" class="organ-tab" data-organ="intestine">Intestine</button>
+                </div>
+                <div class="organ-card" id="organ-card">
+                  <span class="organ-tag" id="organ-tag">GASTRIC SYSTEM</span>
+                  <h4 class="organ-heading" id="organ-heading">Stomach</h4>
+                  <p class="organ-desc" id="organ-desc">
+                    Nausea, vomiting and acute abdominal cramps can occur within hours of consuming contaminated food or bacterial toxins.
+                  </p>
+                  <p class="organ-note">
+                    The exact clinical effect depends on the pathogen dose, toxin stability, and host immunity. Educational overview — does not replace medical advice.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Everyday Settings Checklists + "Would You Eat Here?" Game -->
+          <div class="glass-panel">
+            <div class="panel-header">
+              <div>
+                <span class="panel-eyebrow">EVERYDAY SETTINGS</span>
+                <h3 class="panel-title">At Home · At School · Outside</h3>
+              </div>
+              <div class="setting-tabs" id="setting-tabs">
+                <button type="button" class="setting-tab is-active" data-setting="home">🏠 Home</button>
+                <button type="button" class="setting-tab" data-setting="school">🏫 School</button>
+                <button type="button" class="setting-tab" data-setting="outside">🛍️ Outside</button>
+              </div>
+            </div>
+
+            <ul class="interactive-checklist" id="settings-checklist">
+              <!-- Populated by app.js -->
+            </ul>
+
+            <!-- Embedded "🤔 Would You Eat Here?" Scenario Judgement Game -->
+            <div class="scenario-game-box" id="scenario-game-box">
+              <div class="scenario-header">
+                <span class="panel-eyebrow">REAL-WORLD JUDGEMENT MINI-GAME</span>
+                <span class="panel-badge" id="scenario-counter">SCENARIO 01 / 04</span>
+              </div>
+              <h4 class="scenario-title">🤔 Would You Eat Here?</h4>
+              <p class="scenario-prompt" id="scenario-prompt">
+                A street cart where food is uncovered and flies are visible.
+              </p>
+              <div class="scenario-actions" id="scenario-actions">
+                <button type="button" class="btn-glass-sm" id="scenario-yes">👍 Yes, eat here</button>
+                <button type="button" class="btn-vermilion-sm" id="scenario-no">🚫 No, avoid</button>
+              </div>
+              <div class="scenario-feedback" id="scenario-feedback" hidden>
+                <p class="feedback-verdict" id="scenario-verdict"></p>
+                <p class="feedback-explain" id="scenario-explain"></p>
+                <button type="button" class="btn-glass-sm" id="scenario-next" style="margin-top:0.6rem;">Next Scenario →</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           LAB MODULE 03 : 11-QUESTION QUIZ, MYTH OR FACT & DAILY CHECKLIST
+           =================================================================== -->
+      <section class="lab-section" id="lab-quiz" data-nav-idx="6">
+        <div class="lab-grid-2col">
+
+          <!-- Left: 🧠 11-Question Interactive Food Safety Quiz -->
+          <div class="glass-panel">
+            <div class="panel-header">
+              <div>
+                <span class="panel-eyebrow">KNOWLEDGE ASSESSMENT</span>
+                <h3 class="panel-title">🧠 11-Question Food Safety Quiz</h3>
+              </div>
+              <span class="panel-badge" id="quiz-progress-badge">Q 01 / 11 · SCORE: 0</span>
+            </div>
+
+            <div class="progress-track">
+              <div class="progress-fill" id="quiz-progress-fill" style="width: 9%;"></div>
+            </div>
+
+            <div id="quiz-stage">
+              <h4 class="quiz-question" id="quiz-question">What is cross-contamination?</h4>
+              <div class="quiz-options" id="quiz-options"></div>
+              <div class="quiz-feedback" id="quiz-feedback" hidden>
+                <p class="feedback-verdict" id="quiz-verdict"></p>
+                <p class="feedback-explain" id="quiz-why"></p>
+                <button type="button" class="btn-vermilion-sm" id="quiz-next-btn" style="margin-top:0.75rem;">Next Question →</button>
+              </div>
+            </div>
+
+            <div id="quiz-result-stage" class="quiz-result-stage" hidden>
+              <div class="result-trophy">🏆</div>
+              <h4 class="result-heading">Your Food Safety Score</h4>
+              <div class="result-percent" id="quiz-final-percent">100%</div>
+              <p class="result-rank" id="quiz-final-rank">Food Safety Champion 🏆</p>
+              <p class="result-summary" id="quiz-final-summary">You answered 11 of 11 correctly.</p>
+              <button type="button" class="btn-vermilion" id="quiz-restart-btn" style="margin-top:1rem;">↻ Retake Quiz</button>
+            </div>
+          </div>
+
+          <!-- Right Column: Myth or Fact Game + Daily 8-Habit Score Calculator -->
+          <div class="lab-stack-col">
+
+            <!-- 🚫/✅ Myth or Fact? Mini-Game -->
+            <div class="glass-panel">
+              <div class="panel-header">
+                <div>
+                  <span class="panel-eyebrow">RAPID VERIFICATION GAME</span>
+                  <h3 class="panel-title">🚫 Myth or ✅ Fact?</h3>
+                </div>
+                <span class="panel-badge" id="myth-badge">01 / 06 · CORRECT: 0</span>
+              </div>
+
+              <p class="myth-statement" id="myth-statement">
+                “If food looks and smells normal, it must be safe.”
+              </p>
+
+              <div class="myth-buttons" id="myth-buttons">
+                <button type="button" class="btn-vermilion-sm" id="btn-guess-myth">🚫 MYTH</button>
+                <button type="button" class="btn-glass-sm" id="btn-guess-fact">✅ FACT</button>
+              </div>
+
+              <div class="myth-feedback" id="myth-feedback" hidden>
+                <p class="feedback-verdict" id="myth-verdict"></p>
+                <p class="feedback-explain" id="myth-explain"></p>
+                <button type="button" class="btn-glass-sm" id="myth-next-btn" style="margin-top:0.6rem;">Next Statement →</button>
+              </div>
+            </div>
+
+            <!-- ✅ My Daily Food Safety Checklist (Live Score Calculator) -->
+            <div class="glass-panel">
+              <div class="panel-header">
+                <div>
+                  <span class="panel-eyebrow">DAILY SELF-AUDIT</span>
+                  <h3 class="panel-title">✅ My Daily Food Safety Checklist</h3>
+                </div>
+                <span class="panel-badge" id="daily-score-badge">TODAY: 0%</span>
+              </div>
+
+              <div class="progress-track" style="margin-bottom: 0.9rem;">
+                <div class="progress-fill" id="daily-score-fill" style="width: 0%;"></div>
+              </div>
+
+              <div class="daily-grid" id="daily-checklist-grid">
+                <!-- 8 daily habits populated by app.js -->
+              </div>
+              <p class="panel-footnote">Tick what you practiced today. Stays privately on your device.</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           LAB MODULE 04 : NCSC SURVEY DASHBOARD (BAR CHART, PIE CHART & LIVE EDITOR)
+           =================================================================== -->
+      <section class="lab-section" id="lab-survey" data-nav-idx="7">
+        <div class="glass-panel">
+          <div class="panel-header">
+            <div>
+              <span class="panel-eyebrow">NCSC EMPIRICAL DATA VISUALISATION</span>
+              <h3 class="panel-title">📊 Food &amp; Hygiene Survey Dashboard</h3>
+              <p class="panel-sub">Interactive visualisation of respondent hygiene habits — supports live data entry for field survey results.</p>
+            </div>
+            <div class="survey-mode-controls">
+              <span class="mode-pill" id="survey-mode-pill">DEMO / ILLUSTRATIVE DATA (N = 120)</span>
+              <button type="button" class="btn-vermilion-sm" id="toggle-survey-editor">✏️ Edit / Enter Actual Survey Data</button>
+            </div>
+          </div>
+
+          <!-- Live Survey Data Editor Drawer -->
+          <div class="survey-editor-drawer" id="survey-editor-drawer" hidden>
+            <h4 class="editor-title">Enter Actual NCSC Survey Results</h4>
+            <div class="editor-inputs-grid">
+              <label>Total Respondents (N)<input type="number" id="inp-total" value="120" min="1" max="10000" /></label>
+              <label>Hand Hygiene (%)<input type="number" id="inp-hand" value="74" min="0" max="100" /></label>
+              <label>Food Storage (%)<input type="number" id="inp-storage" value="61" min="0" max="100" /></label>
+              <label>Raw/Cooked Sep (%)<input type="number" id="inp-sep" value="52" min="0" max="100" /></label>
+              <label>Outside Food (%)<input type="number" id="inp-outside" value="68" min="0" max="100" /></label>
+              <label>Always Practice (%)<input type="number" id="inp-always" value="45" min="0" max="100" /></label>
+              <label>Sometimes (%)<input type="number" id="inp-sometimes" value="38" min="0" max="100" /></label>
+              <label>Rarely (%)<input type="number" id="inp-rarely" value="17" min="0" max="100" /></label>
+            </div>
+            <div class="editor-actions">
+              <button type="button" class="btn-vermilion-sm" id="apply-survey-data">Apply Live Survey Data</button>
+              <button type="button" class="btn-glass-sm" id="reset-survey-data">Reset to Demo Data</button>
+            </div>
+          </div>
+
+          <!-- 5 KPI Metric Cards -->
+          <div class="survey-kpi-row" id="survey-kpi-row">
+            <div class="kpi-card">
+              <span class="kpi-val" id="kpi-total">120</span>
+              <span class="kpi-lbl">TOTAL RESPONDENTS</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-val" id="kpi-hand">74%</span>
+              <span class="kpi-lbl">HAND HYGIENE</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-val" id="kpi-storage">61%</span>
+              <span class="kpi-lbl">FOOD STORAGE</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-val" id="kpi-sep">52%</span>
+              <span class="kpi-lbl">RAW / COOKED SEPARATION</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-val" id="kpi-outside">68%</span>
+              <span class="kpi-lbl">OUTSIDE FOOD AWARENESS</span>
+            </div>
+          </div>
+
+          <!-- Bar Chart + Donut/Pie Chart -->
+          <div class="survey-charts-grid">
+            <div class="chart-box">
+              <h4 class="chart-title">Hygiene Practice Rates (Bar Chart)</h4>
+              <div class="bar-chart-stage" id="bar-chart-stage">
+                <!-- Populated dynamically by app.js -->
+              </div>
+            </div>
+
+            <div class="chart-box">
+              <h4 class="chart-title">Overall Practice Frequency (Distribution)</h4>
+              <div class="pie-chart-stage" id="pie-chart-stage">
+                <!-- SVG Donut Chart + Legend populated by app.js -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           LAB MODULE 05 : LEARN-CHECK-CHANGE, 7-DAY CHALLENGE & POSTER STUDIO
+           =================================================================== -->
+      <section class="lab-section" id="lab-challenge" data-nav-idx="8">
+
+        <!-- LEARN -> CHECK -> CHANGE Framework -->
+        <div class="lcc-banner">
+          <div class="lcc-step">
+            <span class="lcc-num">01 · LEARN</span>
+            <h4>Understand the Risks</h4>
+            <p>Recognize how biological, chemical, and physical hazards enter everyday meals.</p>
+          </div>
+          <span class="lcc-arrow">→</span>
+          <div class="lcc-step">
+            <span class="lcc-num">02 · CHECK</span>
+            <h4>Audit Your Habits</h4>
+            <p>Evaluate your home kitchen, school canteen, and street-food choices honestly.</p>
+          </div>
+          <span class="lcc-arrow">→</span>
+          <div class="lcc-step">
+            <span class="lcc-num">03 · CHANGE</span>
+            <h4>Practice Daily</h4>
+            <p>Lock in one habit a day until food safety becomes second nature.</p>
+          </div>
+        </div>
+
+        <!-- 🏆 7-Day Food Hygiene Challenge Tracker -->
+        <div class="glass-panel" style="margin-top: 1.5rem;">
+          <div class="panel-header">
+            <div>
+              <span class="panel-eyebrow">7-DAY HABIT TRACKER</span>
+              <h3 class="panel-title">🏆 Start My 7-Day Food Hygiene Challenge</h3>
+              <p class="panel-sub">One habit a day for a week. Tick each day as you complete it to earn the Champion seal.</p>
+            </div>
+            <span class="panel-badge" id="challenge-pct-badge">0% COMPLETED</span>
+          </div>
+
+          <div class="progress-track" style="margin-bottom: 1.25rem;">
+            <div class="progress-fill" id="challenge-progress-fill" style="width: 0%;"></div>
+          </div>
+
+          <div class="challenge-7grid" id="challenge-7grid">
+            <!-- 7 Day Cards populated by app.js -->
+          </div>
+
+          <div class="champion-banner" id="champion-banner" hidden>
+            <div class="champion-trophy">🏆</div>
+            <div>
+              <h4>Food Safety Awareness Champion!</h4>
+              <p>You completed all 7 days of the NCSC Food Hygiene Challenge. Keep these habits alive every day!</p>
+            </div>
+            <button type="button" class="btn-glass-sm" id="challenge-reset-btn">Restart 7-Day Challenge</button>
+          </div>
+        </div>
+
+        <!-- 📢 Awareness Wall & Custom Digital Poster Studio -->
+        <div class="glass-panel" style="margin-top: 1.5rem;" id="awareness">
+          <div class="panel-header">
+            <div>
+              <span class="panel-eyebrow">COMMUNITY PLEDGE &amp; POSTER STUDIO</span>
+              <h3 class="panel-title">📢 Awareness Wall &amp; Custom Poster Generator</h3>
+              <p class="panel-sub">Click any slogan below or enter your name to generate and download a personalized NCSC Awareness Poster.</p>
+            </div>
+            <span class="panel-badge">NCSC 2026–27</span>
+          </div>
+
+          <!-- 6 Slogan Poster Cards -->
+          <div class="slogan-wall-grid" id="slogan-wall-grid">
+            <!-- Populated by app.js -->
+          </div>
+
+          <!-- Custom Poster Generator + 1-Click PNG Download -->
+          <div class="poster-studio-grid">
+            <div class="poster-controls">
+              <h4 class="poster-studio-title">Create Your Personalized Awareness Poster</h4>
+              <p class="panel-sub">Enter your name and choose a slogan to render an official NCSC FoodSafe pledge card.</p>
+              <div class="poster-form">
+                <input type="text" id="poster-name-input" placeholder="Enter your name (e.g., Dhruv Yadav)" maxlength="40" />
+                <select id="poster-slogan-select">
+                  <option value="Food Safety Starts With Me.">Food Safety Starts With Me.</option>
+                  <option value="Clean Hands. Safe Food. Healthy Life.">Clean Hands. Safe Food. Healthy Life.</option>
+                  <option value="Separate Raw. Protect Cooked.">Separate Raw. Protect Cooked.</option>
+                  <option value="Before You Eat — Check Your Hygiene.">Before You Eat — Check Your Hygiene.</option>
+                  <option value="Don't Just Know. Practice.">Don't Just Know. Practice.</option>
+                </select>
+                <div class="poster-btn-row">
+                  <button type="button" class="btn-vermilion" id="btn-generate-poster">Generate Poster</button>
+                  <button type="button" class="btn-glass" id="btn-download-poster">⬇ Download Poster PNG</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="poster-preview-stage">
+              <div class="poster-card-preview" id="poster-card-preview">
+                <span class="poster-eyebrow">DHRUV · FOODSAFE NCSC AWARENESS PLEDGE</span>
+                <p class="poster-slogan-text" id="poster-slogan-display">“Food Safety Starts With Me.”</p>
+                <p class="poster-author-text" id="poster-author-display">— Dhruv Yadav</p>
+                <span class="poster-foot-meta">NCSC SCIENCE PROJECT 2026–27 · THEME: FOOD &amp; HYGIENE</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =================================================================
+             VERIFIED REFERENCES & PROJECT FOOTER
+             ================================================================= -->
+        <footer class="site-footer" id="references" style="margin-top: 2rem;">
+          <div class="footer-statement">
+            <span class="brand-seal" aria-hidden="true">🥗</span>
+            <div>
+              <p class="footer-lead">
+                Food Safety Is Not Just Knowledge — It Is a Daily Habit.
+                <span class="text-crimson">Learn It. Practice It. Share It.</span>
+              </p>
+              <p class="panel-sub" style="margin-top: 0.35rem;">
+                NCSC Science Project (2026–27) · “Food and Hygiene Habits Amongst People: Survey, Analysis and Awareness Study” · By Dhruv Yadav (Class XI)
+              </p>
+            </div>
+          </div>
+
+          <div class="footer-columns">
+            <div class="footer-col">
+              <h4 class="footer-heading">VERIFIED PUBLIC-HEALTH SOURCES</h4>
+              <ul>
+                <li><a href="https://www.who.int/health-topics/food-safety" target="_blank" rel="noopener noreferrer">WHO — Food Safety Global Fact Sheet ↗</a></li>
+                <li><a href="https://www.who.int/activities/promoting-safe-food-handling" target="_blank" rel="noopener noreferrer">WHO — Five Keys to Safer Food ↗</a></li>
+                <li><a href="https://www.fssai.gov.in/" target="_blank" rel="noopener noreferrer">FSSAI — Food Safety &amp; Standards Authority of India ↗</a></li>
+                <li><a href="https://www.who.int/publications/i/item/9789241565165" target="_blank" rel="noopener noreferrer">WHO — Global Burden of Foodborne Diseases ↗</a></li>
+              </ul>
+            </div>
+
+            <div class="footer-col">
+              <h4 class="footer-heading">PART I · CORE SCIENCE</h4>
+              <ul>
+                <li><a href="#prologue">01 · DHRUV Overview &amp; WHO Burden</a></li>
+                <li><a href="#threshold">02 · The 5-Stage Food Safety Chain</a></li>
+                <li><a href="#corridor">03 · Contamination Vectors</a></li>
+                <li><a href="#gardens">04 · WHO Five Keys Bento</a></li>
+                <li><a href="#research">05 · NCSC Research Methodology</a></li>
+              </ul>
+            </div>
+
+            <div class="footer-col">
+              <h4 class="footer-heading">PART II · INTERACTIVE LAB</h4>
+              <ul>
+                <li><a href="#lab-guide">3-Level Hygiene Guide &amp; Storyboards</a></li>
+                <li><a href="#lab-health">Interactive Body Map &amp; Scenario Game</a></li>
+                <li><a href="#lab-quiz">11-Question Quiz &amp; Myth/Fact</a></li>
+                <li><a href="#lab-survey">Live NCSC Survey Dashboard</a></li>
+                <li><a href="#lab-challenge">7-Day Challenge &amp; Poster Studio</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="footer-bottom">
+            <span>© 2026–27 DHRUV YADAV (CLASS XI) — NCSC FOOD &amp; HYGIENE AWARENESS PROJECT</span>
+            <span>SAFE FOOD · HEALTHY PEOPLE · BETTER FUTURE</span>
+          </div>
+        </footer>
+
+      </section>
+    </div>
+
+  </main>
+
+  <!-- Lightweight Three.js for the 2D+3D Hybrid Water Droplet & Vitality Orb Canvas -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+  <script src="./scene.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
