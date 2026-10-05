@@ -1292,7 +1292,7 @@
 
   function updatePosterPreview(customSlogan) {
     const rawName = posterNameInput && posterNameInput.value.trim();
-    const authorName = rawName || 'Dhruv Yadav (Class XI)';
+    const authorName = rawName || 'FoodSafe Steward (Class XI)';
     const chosenSlogan =
       customSlogan ||
       (posterSloganSelect ? posterSloganSelect.value : 'Food Safety Starts With Me.');
@@ -1313,7 +1313,7 @@
         </div>
         <p class="slogan-quote">“${item.slogan}”</p>
         <div class="slogan-card-foot">
-          <span>DHRUV · FOODSAFE</span>
+          <span>FOODSAFE · LIVING HYGIENE</span>
           <span class="slogan-use-link">USE SLOGAN →</span>
         </div>
       `;
@@ -1359,61 +1359,61 @@
       c.height = 675;
       const ctx = c.getContext('2d');
 
-      // Botanical Emerald & Deep Slate background gradient
+      // Sylva Living Green background gradient
       const bg = ctx.createLinearGradient(0, 0, 1200, 675);
-      bg.addColorStop(0, '#05130f');
-      bg.addColorStop(0.55, '#09221b');
-      bg.addColorStop(1, '#0c2d24');
+      bg.addColorStop(0, '#23271f');
+      bg.addColorStop(0.55, '#34392e');
+      bg.addColorStop(1, '#44483d');
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, 1200, 675);
 
-      // Glowing Emerald Vitality Orb in top-right background
-      const orbGrad = ctx.createRadialGradient(960, 180, 10, 960, 180, 240);
-      orbGrad.addColorStop(0, 'rgba(16, 185, 129, 0.38)');
-      orbGrad.addColorStop(0.5, 'rgba(56, 189, 248, 0.14)');
+      // Glowing Living Green Orb in top-right background
+      const orbGrad = ctx.createRadialGradient(960, 180, 10, 960, 180, 260);
+      orbGrad.addColorStop(0, 'rgba(142, 201, 71, 0.36)');
+      orbGrad.addColorStop(0.5, 'rgba(217, 235, 184, 0.14)');
       orbGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
       ctx.fillStyle = orbGrad;
       ctx.beginPath();
-      ctx.arc(960, 180, 240, 0, Math.PI * 2);
+      ctx.arc(960, 180, 260, 0, Math.PI * 2);
       ctx.fill();
 
       // Border frame
-      ctx.strokeStyle = 'rgba(16, 185, 129, 0.68)';
+      ctx.strokeStyle = 'rgba(142, 201, 71, 0.65)';
       ctx.lineWidth = 3;
       ctx.strokeRect(42, 42, 1116, 591);
 
       // Top Eyebrow
-      ctx.fillStyle = '#10b981';
-      ctx.font = '700 18px Inter, Arial, sans-serif';
-      ctx.fillText('DHRUV · FOODSAFE — NCSC AWARENESS PLEDGE (2026–27)', 90, 115);
+      ctx.fillStyle = '#8ec947';
+      ctx.font = '600 18px Lexend, Inter, Arial, sans-serif';
+      ctx.fillText('FOODSAFE — NCSC LIVING HYGIENE PLEDGE (2026–27)', 90, 115);
 
       // Slogan Text
       const sloganText = posterSloganDisplay
         ? posterSloganDisplay.textContent
         : '“Food Safety Starts With Me.”';
-      ctx.fillStyle = '#f4fbf8';
-      ctx.font = '700 44px Inter, Arial, sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '400 44px Lexend, Inter, Arial, sans-serif';
       ctx.fillText(sloganText, 90, 310);
 
       // Author
       const authorText = posterAuthorDisplay
         ? posterAuthorDisplay.textContent
-        : '— Dhruv Yadav (Class XI)';
-      ctx.fillStyle = '#38bdf8';
-      ctx.font = '600 28px Inter, Arial, sans-serif';
+        : '— FoodSafe Steward (Class XI)';
+      ctx.fillStyle = '#d9ebb8';
+      ctx.font = '500 28px Lexend, Inter, Arial, sans-serif';
       ctx.fillText(authorText, 90, 395);
 
       // Footer Metadata
-      ctx.fillStyle = '#8ab0a4';
-      ctx.font = '500 16px Inter, Arial, sans-serif';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.68)';
+      ctx.font = '400 16px Lexend, Inter, Arial, sans-serif';
       ctx.fillText(
-        'National Children’s Science Congress (NCSC) · Food & Hygiene Habits Study by Dhruv Yadav',
+        'National Children’s Science Congress (NCSC) · Food & Hygiene Habits Study · NCSC Living Green Study',
         90,
         575
       );
 
       const link = document.createElement('a');
-      link.download = 'DHRUV-FoodSafe-NCSC-Poster.png';
+      link.download = 'FoodSafe-NCSC-Poster.png';
       link.href = c.toDataURL('image/png');
       link.click();
     });

@@ -1,89 +1,195 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DHRUV · FoodSafe — NCSC 2026–27 Food &amp; Hygiene Study by Dhruv Yadav</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Serif+JP:wght@400;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>FoodSafe — Into the Living Science of Food &amp; Hygiene (NCSC 2026–27)</title>
+  <meta name="description" content="Protecting communities through clean water, mindful preparation, and science-backed food hygiene." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 24'%3E%3Crect width='22' height='24' fill='%234a4d44'/%3E%3Cpath fill='%23fff' d='M11 1.3c-2.1 0-3.95 1.2-4.75 2.95C3.95 4.55 2.3 6.25 2.3 8.35c0 2.3 1.9 4.2 4.3 4.2h8.8c2.4 0 4.3-1.9 4.3-4.2 0-2.1-1.65-3.8-4-4.1C14.95 2.5 13.1 1.3 11 1.3Z'/%3E%3Cpath fill='%23fff' d='M9.6 12.55h2.8v4.2c1.35.3 2.45 1.15 3.15 2.4-1.35.4-2.4.15-3.15-.4v4.15H9.6v-4.15c-.75.55-1.8.8-3.15.4.7-1.25 1.8-2.1 3.15-2.4v-4.2Z'/%3E%3C/svg%3E" />
+  <script>document.documentElement.className += " js";</script>
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <!-- Fixed 2D Food & Hygiene Atmospheric Backdrop + Subtle 3D WebGL Layer -->
-  <div class="backdrop-stage" aria-hidden="true">
-    <div class="backdrop-2d-photo" id="backdrop-2d-photo"></div>
-    <div class="backdrop-gradient-veil"></div>
-  </div>
 
-  <!-- Lightweight 3D WebGL Canvas (Floating 3D Water Droplets, Vitality Orbs & 3D Parallax) -->
-  <canvas id="kage-canvas" aria-label="Interactive 3D pure water droplets and food hygiene atmosphere"></canvas>
+<!-- =========================================================================
+     <SylvaHero variant="living-green" /> — EXACT THREEUI CANONICAL HERO
+     ========================================================================= -->
+<section class="hero" id="hero">
+  <canvas id="scene"></canvas>
 
-  <!-- Fixed Editorial Top Navigation -->
-  <header class="site-header">
-    <a href="#prologue" class="brand-lockup" aria-label="DHRUV FoodSafe Home">
-      <span class="brand-seal" aria-hidden="true">🥗</span>
-      <span class="brand-text">
-        <span class="brand-title">DHRUV · FOODSAFE</span>
-        <span class="brand-sub">NCSC 2026–27 · CLASS XI SCIENCE PROJECT</span>
-      </span>
-    </a>
-
-    <nav class="site-nav" aria-label="Primary Navigation">
-      <a href="#prologue" class="nav-link is-active" data-section="0">OVERVIEW</a>
-      <a href="#threshold" class="nav-link" data-section="1">WHY IT MATTERS</a>
-      <a href="#gardens" class="nav-link" data-section="2">WHO 5 KEYS</a>
-      <a href="#research" class="nav-link" data-section="3">RESEARCH</a>
-      <span class="nav-divider" aria-hidden="true">|</span>
-      <a href="#lab-guide" class="nav-link nav-lab" data-section="4">GUIDE &amp; VIDEOS</a>
-      <a href="#lab-health" class="nav-link nav-lab" data-section="5">HEALTH &amp; CHECKS</a>
-      <a href="#lab-quiz" class="nav-link nav-lab" data-section="6">QUIZ &amp; GAMES</a>
-      <a href="#lab-survey" class="nav-link nav-lab" data-section="7">SURVEY DATA</a>
-      <a href="#lab-challenge" class="nav-link nav-cta" data-section="8">7-DAY CHALLENGE</a>
+  <div class="dock-wrap">
+    <nav class="dock par-dock" style="--pd:5" data-spec aria-label="Primary">
+      <a class="dock-item dock-mark" data-dock data-spec data-burst href="#hero" style="--d:120ms" aria-label="FoodSafe — home">
+        <svg viewBox="0 0 22 24" aria-hidden="true">
+          <path d="M11 1.3c-2.1 0-3.95 1.2-4.75 2.95C3.95 4.55 2.3 6.25 2.3 8.35c0 2.3 1.9 4.2 4.3 4.2h8.8c2.4 0 4.3-1.9 4.3-4.2 0-2.1-1.65-3.8-4-4.1C14.95 2.5 13.1 1.3 11 1.3Z"/>
+          <path d="M9.6 12.55h2.8v4.2c1.35.3 2.45 1.15 3.15 2.4-1.35.4-2.4.15-3.15-.4v4.15H9.6v-4.15c-.75.55-1.8.8-3.15.4.7-1.25 1.8-2.1 3.15-2.4v-4.2Z"/>
+        </svg>
+      </a>
+      <a class="dock-item is-active" data-dock data-spec data-burst href="#prologue" style="--d:180ms">
+        <span class="glyph" aria-hidden="true">
+          <svg viewBox="0 0 16 16"><path d="M8 14V9"/><path d="M8 9c0-2.4 1.7-4.3 4-4.3.2 2.6-1.6 4.6-4 4.3Z"/><path d="M8 10.5C7.9 8.4 6.4 6.8 4.4 6.8 4.3 8.9 5.9 10.6 8 10.5Z"/></svg>
+        </span>
+        <span>Overview</span>
+      </a>
+      <a class="dock-item" data-dock data-spec data-burst href="#gardens" style="--d:230ms">
+        <span class="glyph" aria-hidden="true">
+          <svg viewBox="0 0 16 16"><path d="M1.6 12.4c2.4-3.4 4.3-5.1 5.7-5.1 2 0 3 3.6 5 3.6 1.1 0 1.9-.5 2.4-1.4"/><path d="M4.3 6.2C5.5 4.4 6.6 3.5 7.6 3.5c1.5 0 2.2 2.4 3.7 2.4"/></svg>
+        </span>
+        <span>WHO 5 Keys</span>
+      </a>
+      <a class="dock-item" data-dock data-spec data-burst href="#lab-guide" style="--d:280ms">
+        <span class="glyph" aria-hidden="true">
+          <svg viewBox="0 0 16 16"><path d="M4 2.4h5.3L12 5.1v8.5H4z"/><path d="M9.2 2.4V5h2.7"/><path d="M6 8.4h4M6 10.8h2.8"/></svg>
+        </span>
+        <span>Hygiene Lab</span>
+      </a>
+      <a class="dock-item dock-item--enter" data-dock data-spec data-burst href="#lab-quiz" style="--d:330ms">
+        <span class="glyph" aria-hidden="true">
+          <svg viewBox="0 0 16 16"><path d="M6.6 2.5h5.1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6.6"/><path d="M2.6 8h6.6"/><path d="m7 5.6 2.4 2.4L7 10.4"/></svg>
+        </span>
+        <span>Quiz &amp; Data</span>
+      </a>
     </nav>
-  </header>
-
-  <!-- Fixed Live NCSC Telemetry Pill (Bottom Center) -->
-  <div class="alley-hud" aria-live="polite">
-    <span class="hud-dot"></span>
-    <span class="hud-metric" id="hud-depth">NCSC 2026–27 · DHRUV YADAV</span>
-    <span class="hud-sep">·</span>
-    <span class="hud-metric" id="hud-gate">SECTION 01 / 09</span>
-    <span class="hud-sep hud-hide-mobile">·</span>
-    <span class="hud-hint hud-hide-mobile" id="hud-mode">FOOD &amp; HYGIENE AWARENESS PLATFORM</span>
   </div>
 
-  <!-- Main Scroll Container -->
-  <main class="scroll-container" id="scroll-container">
+  <div class="stage" id="stage">
 
-    <!-- =====================================================================
-         SECTION 01 : HERO — MONUMENTAL "D H R U V" & WHO GLOBAL BURDEN
-         ===================================================================== -->
-    <section class="chapter chapter-prologue" id="prologue" data-nav-idx="0">
+    <div class="guides fade" style="--d:900ms" aria-hidden="true">
+      <i style="left:calc(405 * var(--u))"></i>
+      <i style="left:calc(748 * var(--u))"></i>
+      <i style="left:calc(1091 * var(--u))"></i>
+    </div>
 
-      <!-- Unobstructed Monumental "D H R U V" Centerpiece (Slides up smoothly on scroll) -->
-      <div class="dhruv-monument-wrap" id="dhruv-monument" aria-label="DHRUV Food and Hygiene Project">
-        <div class="dhruv-monument-tag">
-          <span>NATIONAL CHILDREN’S SCIENCE CONGRESS (NCSC 2026–27) · THEME: FOOD &amp; HYGIENE</span>
-        </div>
-        <div class="dhruv-letters" role="heading" aria-level="1">
-          <span class="dhruv-char" data-char="D">D</span>
-          <span class="dhruv-char" data-char="H">H</span>
-          <span class="dhruv-char" data-char="R">R</span>
-          <span class="dhruv-char" data-char="U">U</span>
-          <span class="dhruv-char" data-char="V">V</span>
-        </div>
-        <div class="dhruv-monument-sub">
-          <span>FOOD AND HYGIENE HABITS AMONGST PEOPLE: SURVEY, ANALYSIS &amp; AWARENESS STUDY · CLASS XI</span>
+    <div class="ghost fade" style="--d:1150ms" aria-hidden="true">FOODSAFE</div>
+
+    <!-- card 1 sits *behind* the canvas so the moss drapes over its shoulder -->
+    <article class="card card--about mask" style="--d:760ms; --pd:10; --pr:2.2">
+      <figure class="portal" data-delay="920">
+        <span class="portal-media"><img src="inner-green-assets/card-ethos.jpg" alt="A cushion of moss grown over lichen-crusted stones" loading="eager" decoding="async"></span>
+        <canvas class="pixel-reveal" aria-hidden="true"></canvas>
+      </figure>
+      <p class="label">Our Ethos</p>
+      <h2>Pure water, safe food.</h2>
+    </article>
+
+    <!-- the About knob rides *outside* the card: the card has to stay a plain
+         painted box under #scene, so anything that must sit in front of the
+         moss lives here instead, sharing the card's parallax origin -->
+    <span class="knob-float" style="--pd:10; --pr:2.2">
+      <button class="knob knob--about mask-circle" style="--d:1100ms" aria-label="Explore WHO 5 Keys to Safer Food">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 21v-7"/><path d="M12 14c0-3.3 2.4-6 5.5-6 .3 3.6-2.2 6.4-5.5 6Z"/>
+          <path d="M12 16c-.1-2.9-2.2-5.2-4.9-5.2C6.8 13.7 9 16 12 16Z"/>
+        </svg>
+      </button>
+    </span>
+
+    <h1 class="headline" style="--pd:18; --pr:1.2">
+      <span><i style="--d:260ms">Safe food begins</i></span>
+      <span><i style="--d:360ms">with daily habits</i></span>
+    </h1>
+
+    <p class="lede mask" style="--d:480ms; --pd:14; --pr:1">Protecting communities through clean water, mindful preparation, and science-backed food hygiene.</p>
+
+    <div class="pill-clip">
+      <div class="pill mask" style="--d:600ms; --pd:15; --pr:1.4">
+        <div class="liquid-stage liquid-stage--explore" data-liquid-metal="explore">
+          <div class="liquid-plate plate" aria-hidden="true"></div>
+          <canvas class="liquid-fx" aria-hidden="true"></canvas>
+          <button class="liquid-button liquid-button--explore btn" type="button">
+            <svg class="ico" viewBox="0 0 115 115" aria-hidden="true">
+              <g stroke="currentColor" stroke-width="11" stroke-linecap="round">
+                <path d="M14 34.5 H101"/>
+                <path d="M14 57.5 H101"/>
+                <path d="M14 80.5 H68"/>
+              </g>
+            </svg>
+            <span class="lbl">Explore the study</span>
+          </button>
         </div>
       </div>
+    </div>
 
+    <span class="play-wrap" style="--pd:20">
+      <span class="play-clip">
+        <span class="play-glass mask-circle" style="--d:900ms">
+          <span class="liquid-stage liquid-stage--play" data-liquid-metal="play">
+            <span class="liquid-plate plate" aria-hidden="true"></span>
+            <canvas class="liquid-fx" aria-hidden="true"></canvas>
+            <button class="liquid-button liquid-button--play btn" type="button" aria-label="Open Hygiene Guide and Video Demonstrations">
+              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8 5.2v13.6L19 12z" fill="currentColor"/>
+              </svg>
+            </button>
+          </span>
+        </span>
+      </span>
+      <span class="play-ring mask-circle" style="--d:840ms" aria-hidden="true"></span>
+    </span>
+
+    <dl class="stat stat--a mask" style="--d:700ms; --pd:12">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+          <circle cx="15" cy="15" r="10.5" stroke-dasharray="0.6 3.6"/>
+          <circle cx="15" cy="15" r="5.6" stroke-dasharray="0.6 3.2"/>
+          <circle cx="15" cy="15" r="1.1" fill="currentColor" stroke="none"/>
+        </svg>
+      </span>
+      <div><dt>WHO global cases</dt><dd>866M+ / yr</dd></div>
+    </dl>
+
+    <dl class="stat stat--b mask" style="--d:770ms; --pd:13">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+          <g id="rays">
+            <path d="M15 3.5v5"/><path d="M15 21.5v5"/><path d="M3.5 15h5"/><path d="M21.5 15h5"/>
+            <path d="M6.9 6.9l3.5 3.5"/><path d="M19.6 19.6l3.5 3.5"/><path d="M23.1 6.9l-3.5 3.5"/><path d="M10.4 19.6l-3.5 3.5"/>
+          </g>
+          <circle cx="15" cy="15" r="3.6"/>
+        </svg>
+      </span>
+      <div><dt>Hazards studied</dt><dd>42 mapped</dd></div>
+    </dl>
+
+    <article class="card card--stove mask" style="--d:880ms; --pd:22; --pr:2.4">
+      <p class="label">NCSC Study 26–27</p>
+      <h2>Farm to Plate</h2>
+      <figure class="portal" data-delay="1080">
+        <span class="portal-media"><img src="inner-green-assets/card-ecostove.jpg" alt="Moss-covered boulders in a misty grove" loading="eager" decoding="async"></span>
+        <canvas class="pixel-reveal" aria-hidden="true"></canvas>
+      </figure>
+      <button class="knob" aria-label="Open NCSC Field Survey Data">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 21v-7"/><path d="M12 14c0-3.3 2.4-6 5.5-6 .3 3.6-2.2 6.4-5.5 6Z"/>
+          <path d="M12 16c-.1-2.9-2.2-5.2-4.9-5.2C6.8 13.7 9 16 12 16Z"/>
+        </svg>
+      </button>
+    </article>
+
+    <a class="scroll mask" style="--d:1040ms; --pd:9" href="#prologue">Discover<span class="track"></span></a>
+
+  </div>
+</section>
+
+<!-- Fixed Live NCSC Telemetry Pill (Bottom Center) -->
+<div class="alley-hud" aria-live="polite">
+  <span class="hud-dot"></span>
+  <span class="hud-metric" id="hud-depth">FOODSAFE · NCSC 2026–27</span>
+  <span class="hud-sep">·</span>
+  <span class="hud-metric" id="hud-gate">SECTION 01 / 09</span>
+  <span class="hud-sep hud-hide-mobile">·</span>
+  <span class="hud-hint hud-hide-mobile" id="hud-mode">LIVING FOOD &amp; HYGIENE PLATFORM</span>
+</div>
+
+<!-- Main Scroll Container (All NCSC 2026-27 Data & Interactive Modules) -->
+<main class="scroll-container" id="scroll-container">
+  <section class="chapter chapter-prologue" id="prologue" data-nav-idx="0">
       <!-- Hero Content Row Below Monumental Title (Zero Overlap!) -->
       <div class="prologue-top">
         <div class="prologue-copy">
           <div class="eyebrow">
             <span class="eyebrow-dot"></span>
-            <span>NCSC SCIENCE PROJECT · BY DHRUV YADAV (CLASS XI)</span>
+            <span>NCSC SCIENCE PROJECT · LIVING GREEN EDITION · CLASS XI</span>
           </div>
           <h2 class="hero-headline">
             IS YOUR FOOD<br />
@@ -456,11 +562,11 @@
             <span class="ritual-tag">CLASS XI</span>
           </div>
           <div class="ritual-card-body">
-            <h3 class="ritual-title">Dhruv Yadav</h3>
+            <h3 class="ritual-title">FoodSafe Study</h3>
             <p class="ritual-desc">Student Researcher · Class XI · Session 2026–27 · National Children’s Science Congress (NCSC).</p>
           </div>
           <div class="ritual-card-foot">
-            <span class="ritual-duration">MADE BY DHRUV YADAV</span>
+            <span class="ritual-duration">NCSC RESEARCH INITIATIVE</span>
           </div>
         </article>
 
@@ -941,7 +1047,7 @@
               <h4 class="poster-studio-title">Create Your Personalized Awareness Poster</h4>
               <p class="panel-sub">Enter your name and choose a slogan to render an official NCSC FoodSafe pledge card.</p>
               <div class="poster-form">
-                <input type="text" id="poster-name-input" placeholder="Enter your name (e.g., Dhruv Yadav)" maxlength="40" />
+                <input type="text" id="poster-name-input" placeholder="Enter your name (e.g., Aarav Sharma)" maxlength="40" />
                 <select id="poster-slogan-select">
                   <option value="Food Safety Starts With Me.">Food Safety Starts With Me.</option>
                   <option value="Clean Hands. Safe Food. Healthy Life.">Clean Hands. Safe Food. Healthy Life.</option>
@@ -958,9 +1064,9 @@
 
             <div class="poster-preview-stage">
               <div class="poster-card-preview" id="poster-card-preview">
-                <span class="poster-eyebrow">DHRUV · FOODSAFE NCSC AWARENESS PLEDGE</span>
+                <span class="poster-eyebrow">FOODSAFE · LIVING HYGIENE NCSC PLEDGE</span>
                 <p class="poster-slogan-text" id="poster-slogan-display">“Food Safety Starts With Me.”</p>
-                <p class="poster-author-text" id="poster-author-display">— Dhruv Yadav</p>
+                <p class="poster-author-text" id="poster-author-display">— FoodSafe Steward</p>
                 <span class="poster-foot-meta">NCSC SCIENCE PROJECT 2026–27 · THEME: FOOD &amp; HYGIENE</span>
               </div>
             </div>
@@ -979,7 +1085,7 @@
                 <span class="text-crimson">Learn It. Practice It. Share It.</span>
               </p>
               <p class="panel-sub" style="margin-top: 0.35rem;">
-                NCSC Science Project (2026–27) · “Food and Hygiene Habits Amongst People: Survey, Analysis and Awareness Study” · By Dhruv Yadav (Class XI)
+                NCSC Science Project (2026–27) · “Food and Hygiene Habits Amongst People: Survey, Analysis and Awareness Study” · NCSC Living Green Study
               </p>
             </div>
           </div>
@@ -998,7 +1104,7 @@
             <div class="footer-col">
               <h4 class="footer-heading">PART I · CORE SCIENCE</h4>
               <ul>
-                <li><a href="#prologue">01 · DHRUV Overview &amp; WHO Burden</a></li>
+                <li><a href="#prologue">01 · FoodSafe Overview &amp; WHO Burden</a></li>
                 <li><a href="#threshold">02 · The 5-Stage Food Safety Chain</a></li>
                 <li><a href="#corridor">03 · Contamination Vectors</a></li>
                 <li><a href="#gardens">04 · WHO Five Keys Bento</a></li>
@@ -1019,7 +1125,7 @@
           </div>
 
           <div class="footer-bottom">
-            <span>© 2026–27 DHRUV YADAV (CLASS XI) — NCSC FOOD &amp; HYGIENE AWARENESS PROJECT</span>
+            <span>© 2026–27 FOODSAFE — NCSC FOOD &amp; HYGIENE AWARENESS PLATFORM</span>
             <span>SAFE FOOD · HEALTHY PEOPLE · BETTER FUTURE</span>
           </div>
         </footer>
@@ -1027,11 +1133,10 @@
       </section>
     </div>
 
-  </main>
+</main>
 
-  <!-- Lightweight Three.js for the 2D+3D Hybrid Water Droplet & Vitality Orb Canvas -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
-  <script src="./scene.js"></script>
-  <script src="./app.js"></script>
+<script src="inner-green-assets/three.min.js"></script>
+<script src="./sylva-hero.js"></script>
+<script src="./app.js"></script>
 </body>
 </html>
