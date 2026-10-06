@@ -997,132 +997,435 @@
   renderDailyChecklist();
 
   // ==========================================================================
-  // 10. LAB MODULE 04 : 📊 NCSC SURVEY DASHBOARD (BAR, DONUT & LIVE EDITOR)
+  // 10. LAB MODULE 04 : 📊 NCSC EMPIRICAL SURVEY & ANALYSIS (n = 55, 6 PARTS)
   // ==========================================================================
-  const DEFAULT_SURVEY = {
+  const OFFICIAL_SURVEY_N55 = {
     isCustom: false,
-    total: 120,
-    hand: 74,
-    storage: 61,
-    sep: 52,
-    outside: 68,
-    always: 45,
-    sometimes: 38,
-    rarely: 17,
+    liveMerged: false,
+    total: 55,
+    ageGroups: [
+      { group: '13–17', count: 14, note: 'School students / teens' },
+      { group: '18–25', count: 16, note: 'College & young adults (Largest)' },
+      { group: '26–40', count: 13, note: 'Working adults & parents' },
+      { group: '41–60', count: 9, note: 'Middle-aged households' },
+      { group: '60+', count: 3, note: 'Senior citizens' },
+    ],
+    practices: [
+      {
+        key: 'handwashing',
+        label: 'Handwashing before eating/handling food',
+        short: 'Handwashing',
+        yes: 43,
+        sometimes: 8,
+        no: 4,
+      },
+      {
+        key: 'covering',
+        label: 'Keeping cooked food covered',
+        short: 'Cover cooked food',
+        yes: 41,
+        sometimes: 10,
+        no: 4,
+      },
+      {
+        key: 'utensils',
+        label: 'Clean utensils/surfaces',
+        short: 'Clean utensils',
+        yes: 39,
+        sometimes: 11,
+        no: 5,
+      },
+      {
+        key: 'washing',
+        label: 'Washing fruits and vegetables',
+        short: 'Wash fruits & veg',
+        yes: 37,
+        sometimes: 13,
+        no: 5,
+      },
+      {
+        key: 'storage',
+        label: 'Safe storage of perishable food',
+        short: 'Safe storage',
+        yes: 31,
+        sometimes: 14,
+        no: 10,
+      },
+      {
+        key: 'expiry',
+        label: 'Checking expiry/use-by information',
+        short: 'Check expiry dates',
+        yes: 29,
+        sometimes: 15,
+        no: 11,
+      },
+      {
+        key: 'outside',
+        label: 'Considering hygiene while eating outside',
+        short: 'Hygiene eating out',
+        yes: 27,
+        sometimes: 16,
+        no: 12,
+      },
+      {
+        key: 'separating',
+        label: 'Separating raw and cooked food',
+        short: 'Separate raw/cooked',
+        yes: 24,
+        sometimes: 17,
+        no: 14,
+      },
+    ],
   };
 
-  let surveyState = { ...DEFAULT_SURVEY };
+  function cloneSurvey(src) {
+    return {
+      isCustom: src.isCustom,
+      liveMerged: src.liveMerged,
+      total: src.total,
+      ageGroups: src.ageGroups.map((a) => ({ ...a })),
+      practices: src.practices.map((p) => ({ ...p })),
+    };
+  }
+
+  let surveyState = cloneSurvey(OFFICIAL_SURVEY_N55);
+  let selectedPracticeKey = 'handwashing';
+  let whatIfConversionPct = 0; // 0% to 100% of "Sometimes" converted to "Yes"
+
+  // Personal Benchmarker answers ('yes' | 'sometimes' | 'no' for each of the 8 keys)
+  const userBenchAnswers = {
+    handwashing: 'yes',
+    covering: 'yes',
+    utensils: 'yes',
+    washing: 'yes',
+    storage: 'yes',
+    expiry: 'sometimes',
+    outside: 'sometimes',
+    separating: 'yes',
+  };
 
   const kpiTotalEl = document.getElementById('kpi-total');
-  const kpiHandEl = document.getElementById('kpi-hand');
-  const kpiStorageEl = document.getElementById('kpi-storage');
-  const kpiSepEl = document.getElementById('kpi-sep');
-  const kpiOutsideEl = document.getElementById('kpi-outside');
   const surveyModePill = document.getElementById('survey-mode-pill');
-  const barChartStage = document.getElementById('bar-chart-stage');
-  const pieChartStage = document.getElementById('pie-chart-stage');
+  const ageDistStage = document.getElementById('age-distribution-stage');
+  const stackedPracticeStage = document.getElementById('stacked-practice-stage');
+  const practicePillsWrap = document.getElementById('practice-pills-wrap');
+  const practiceDetailStage = document.getElementById('practice-detail-stage');
+  const surveyFindingsCards = document.getElementById('survey-findings-cards');
+  const rankingBarsStage = document.getElementById('ranking-bars-stage');
+  const whatIfSlider = document.getElementById('whatif-slider');
+  const whatIfPctLabel = document.getElementById('whatif-pct-label');
+  const whatIfSummaryText = document.getElementById('whatif-summary-text');
 
   const toggleEditorBtn = document.getElementById('toggle-survey-editor');
   const editorDrawer = document.getElementById('survey-editor-drawer');
   const applySurveyBtn = document.getElementById('apply-survey-data');
   const resetSurveyBtn = document.getElementById('reset-survey-data');
+  const exportCsvBtn = document.getElementById('btn-export-survey-csv');
+
+  function fmtPct(num, den) {
+    if (!den || den <= 0) return '0.0';
+    return ((num / den) * 100).toFixed(1);
+  }
+
+  function getActiveSurveyDataset() {
+    const base = cloneSurvey(surveyState);
+    if (base.liveMerged) {
+      base.total += 1;
+      base.practices.forEach((p) => {
+        const ans = userBenchAnswers[p.key] || 'yes';
+        if (ans === 'yes') p.yes += 1;
+        else if (ans === 'sometimes') p.sometimes += 1;
+        else p.no += 1;
+      });
+    }
+    return base;
+  }
 
   function renderSurveyDashboard() {
-    if (kpiTotalEl) kpiTotalEl.textContent = String(surveyState.total);
-    if (kpiHandEl) kpiHandEl.textContent = `${surveyState.hand}%`;
-    if (kpiStorageEl) kpiStorageEl.textContent = `${surveyState.storage}%`;
-    if (kpiSepEl) kpiSepEl.textContent = `${surveyState.sep}%`;
-    if (kpiOutsideEl) kpiOutsideEl.textContent = `${surveyState.outside}%`;
+    const data = getActiveSurveyDataset();
+    const N = Math.max(1, data.total);
+
+    if (kpiTotalEl) kpiTotalEl.textContent = String(N);
+    document.querySelectorAll('.js-n-label').forEach((el) => {
+      el.textContent = `n = ${N}`;
+    });
 
     if (surveyModePill) {
-      surveyModePill.textContent = surveyState.isCustom
-        ? `ACTUAL FIELD SURVEY DATA (N = ${surveyState.total})`
-        : `DEMO / ILLUSTRATIVE DATA (N = ${surveyState.total})`;
+      if (data.liveMerged) {
+        surveyModePill.textContent = `LIVE MERGED DATASET (n = ${N})`;
+      } else if (data.isCustom) {
+        surveyModePill.textContent = `CUSTOM FIELD DATA (n = ${N})`;
+      } else {
+        surveyModePill.textContent = `OFFICIAL NCSC SURVEY (n = ${N})`;
+      }
     }
 
-    // 1. Render Bar Chart
-    if (barChartStage) {
-      const bars = [
-        { label: 'Hand Hygiene (Soap 20s)', val: surveyState.hand, color: '#10b981' },
-        { label: 'Outside Food Inspection', val: surveyState.outside, color: '#38bdf8' },
-        { label: 'Safe Food Storage (<5°C)', val: surveyState.storage, color: '#14b8a6' },
-        { label: 'Raw / Cooked Separation', val: surveyState.sep, color: '#fbbf24' },
-      ];
+    // -----------------------------------------------------------------------
+    // SUB-SECTION 02: Age-Group Distribution
+    // -----------------------------------------------------------------------
+    if (ageDistStage) {
+      const ageTotal = data.ageGroups.reduce((acc, g) => acc + g.count, 0) || 55;
+      const maxCount = Math.max(...data.ageGroups.map((g) => g.count), 1);
 
-      barChartStage.innerHTML = bars
-        .map(
-          (b) => `
-          <div class="bar-row">
-            <div class="bar-meta">
-              <span class="bar-lbl">${b.label}</span>
-              <span class="bar-val">${b.val}%</span>
+      ageDistStage.innerHTML = data.ageGroups
+        .map((g) => {
+          const pct = fmtPct(g.count, ageTotal);
+          const barWidth = Math.round((g.count / maxCount) * 100);
+          const isPeak = g.count === maxCount;
+          return `
+            <div class="age-bar-card ${isPeak ? 'is-peak' : ''}">
+              <div class="age-bar-top">
+                <span class="age-bracket">${g.group} yrs</span>
+                <span class="age-pct">${pct}%</span>
+              </div>
+              <div class="bar-track" style="height:10px; margin: 0.45rem 0;">
+                <div class="bar-fill" style="width:${barWidth}%; background:${isPeak ? '#8ec947' : '#d9ebb8'};"></div>
+              </div>
+              <div class="age-bar-foot">
+                <strong>${g.count} respondents</strong>
+                <span>${g.note}</span>
+              </div>
             </div>
-            <div class="bar-track">
-              <div class="bar-fill" style="width: ${b.val}%; background: ${b.color};"></div>
-            </div>
-          </div>
-        `
-        )
+          `;
+        })
         .join('');
     }
 
-    // 2. Render SVG Donut / Pie Chart
-    if (pieChartStage) {
-      const sum = Math.max(1, surveyState.always + surveyState.sometimes + surveyState.rarely);
-      const pAlways = Math.round((surveyState.always / sum) * 100);
-      const pSometimes = Math.round((surveyState.sometimes / sum) * 100);
-      const pRarely = Math.max(0, 100 - pAlways - pSometimes);
+    // -----------------------------------------------------------------------
+    // SUB-SECTION 03-A: 8-Practice 100% Stacked Bar Chart
+    // -----------------------------------------------------------------------
+    if (stackedPracticeStage) {
+      stackedPracticeStage.innerHTML = data.practices
+        .map((p) => {
+          const tot = Math.max(1, p.yes + p.sometimes + p.no);
+          const yPct = ((p.yes / tot) * 100).toFixed(1);
+          const sPct = ((p.sometimes / tot) * 100).toFixed(1);
+          const nPct = Math.max(0, 100 - parseFloat(yPct) - parseFloat(sPct)).toFixed(1);
+          const isSel = p.key === selectedPracticeKey;
 
-      // Circle circumference for r=54 is 2 * PI * 54 ≈ 339.29
+          return `
+            <div class="stacked-row ${isSel ? 'is-selected' : ''}" data-practice-key="${p.key}" role="button" tabindex="0">
+              <div class="stacked-row-head">
+                <span class="stacked-row-title">${p.short}</span>
+                <span class="stacked-row-counts">
+                  <strong style="color:#8ec947;">Yes: ${yPct}% (${p.yes})</strong> ·
+                  <span style="color:#e6c259;">Some: ${sPct}% (${p.sometimes})</span> ·
+                  <span style="color:#f0655b;">No: ${nPct}% (${p.no})</span>
+                </span>
+              </div>
+              <div class="stacked-track" title="${p.label}: Yes ${yPct}%, Sometimes ${sPct}%, No ${nPct}%">
+                <div class="stacked-seg seg-yes" style="width:${yPct}%;"></div>
+                <div class="stacked-seg seg-some" style="width:${sPct}%;"></div>
+                <div class="stacked-seg seg-no" style="width:${nPct}%;"></div>
+              </div>
+            </div>
+          `;
+        })
+        .join('');
+
+      stackedPracticeStage.querySelectorAll('.stacked-row').forEach((row) => {
+        row.addEventListener('click', () => {
+          selectedPracticeKey = row.getAttribute('data-practice-key') || 'handwashing';
+          renderSurveyDashboard();
+        });
+      });
+    }
+
+    // -----------------------------------------------------------------------
+    // SUB-SECTION 03-B: Interactive 8-Practice Selector Pills + Donut + Bars
+    // -----------------------------------------------------------------------
+    if (practicePillsWrap) {
+      practicePillsWrap.innerHTML = data.practices
+        .map((p) => {
+          const isAct = p.key === selectedPracticeKey;
+          return `
+            <button type="button" class="practice-pill-btn ${isAct ? 'is-active' : ''}" data-pill-key="${p.key}">
+              ${p.short}
+            </button>
+          `;
+        })
+        .join('');
+
+      practicePillsWrap.querySelectorAll('.practice-pill-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          selectedPracticeKey = btn.getAttribute('data-pill-key') || 'handwashing';
+          renderSurveyDashboard();
+        });
+      });
+    }
+
+    if (practiceDetailStage) {
+      const activeP =
+        data.practices.find((p) => p.key === selectedPracticeKey) || data.practices[0];
+      const tot = Math.max(1, activeP.yes + activeP.sometimes + activeP.no);
+      const yPct = parseFloat(((activeP.yes / tot) * 100).toFixed(1));
+      const sPct = parseFloat(((activeP.sometimes / tot) * 100).toFixed(1));
+      const nPct = parseFloat(Math.max(0, 100 - yPct - sPct).toFixed(1));
+
       const C = 339.29;
-      const len1 = (pAlways / 100) * C;
-      const len2 = (pSometimes / 100) * C;
-      const len3 = (pRarely / 100) * C;
+      const lenYes = (yPct / 100) * C;
+      const lenSome = (sPct / 100) * C;
+      const lenNo = (nPct / 100) * C;
 
-      pieChartStage.innerHTML = `
-        <div class="donut-layout">
-          <svg viewBox="0 0 140 140" class="donut-svg" aria-label="Practice frequency distribution chart">
+      practiceDetailStage.innerHTML = `
+        <div class="active-practice-head">
+          <span class="panel-eyebrow">SELECTED PRACTICE BREAKDOWN</span>
+          <h6 class="active-practice-title">${activeP.label}</h6>
+        </div>
+        <div class="donut-layout" style="margin-top:0.75rem;">
+          <svg viewBox="0 0 140 140" class="donut-svg" aria-label="${activeP.label} response chart">
             <circle cx="70" cy="70" r="54" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="16" />
-            <!-- Segment 1: Always -->
-            <circle cx="70" cy="70" r="54" fill="none" stroke="#10b981" stroke-width="16"
-              stroke-dasharray="${len1} ${C}" stroke-dashoffset="0" transform="rotate(-90 70 70)" />
-            <!-- Segment 2: Sometimes -->
-            <circle cx="70" cy="70" r="54" fill="none" stroke="#38bdf8" stroke-width="16"
-              stroke-dasharray="${len2} ${C}" stroke-dashoffset="${-len1}" transform="rotate(-90 70 70)" />
-            <!-- Segment 3: Rarely -->
-            <circle cx="70" cy="70" r="54" fill="none" stroke="#fbbf24" stroke-width="16"
-              stroke-dasharray="${len3} ${C}" stroke-dashoffset="${-(len1 + len2)}" transform="rotate(-90 70 70)" />
-            <text x="70" y="66" text-anchor="middle" fill="#f4fbf8" font-size="16" font-weight="700">N=${surveyState.total}</text>
-            <text x="70" y="82" text-anchor="middle" fill="#c5ded6" font-size="8" letter-spacing="1">RESPONDENTS</text>
+            <circle cx="70" cy="70" r="54" fill="none" stroke="#8ec947" stroke-width="16"
+              stroke-dasharray="${lenYes} ${C}" stroke-dashoffset="0" transform="rotate(-90 70 70)" />
+            <circle cx="70" cy="70" r="54" fill="none" stroke="#e6c259" stroke-width="16"
+              stroke-dasharray="${lenSome} ${C}" stroke-dashoffset="${-lenYes}" transform="rotate(-90 70 70)" />
+            <circle cx="70" cy="70" r="54" fill="none" stroke="#f0655b" stroke-width="16"
+              stroke-dasharray="${lenNo} ${C}" stroke-dashoffset="${-(lenYes + lenSome)}" transform="rotate(-90 70 70)" />
+            <text x="70" y="65" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="700">${yPct}%</text>
+            <text x="70" y="81" text-anchor="middle" fill="#d9ebb8" font-size="7.5" letter-spacing="1">SAID "YES"</text>
           </svg>
-          <div class="donut-legend">
-            <div class="legend-item">
-              <span class="legend-swatch" style="background:#10b981;"></span>
-              <div>
-                <strong>Always Practice (${pAlways}%)</strong>
-                <span>Consistent daily food safety habits</span>
+
+          <div class="breakdown-bars-col">
+            <div class="bdown-row">
+              <div class="bdown-meta">
+                <span><i class="swatch-dot" style="background:#8ec947;"></i> <strong>Yes</strong> (Followed regularly)</span>
+                <strong>${activeP.yes} responses • ${yPct}%</strong>
               </div>
+              <div class="bar-track"><div class="bar-fill" style="width:${yPct}%; background:#8ec947;"></div></div>
             </div>
-            <div class="legend-item">
-              <span class="legend-swatch" style="background:#38bdf8;"></span>
-              <div>
-                <strong>Sometimes Practice (${pSometimes}%)</strong>
-                <span>Aware of rules but inconsistent</span>
+
+            <div class="bdown-row">
+              <div class="bdown-meta">
+                <span><i class="swatch-dot" style="background:#e6c259;"></i> <strong>Sometimes</strong> (Inconsistent)</span>
+                <strong>${activeP.sometimes} responses • ${sPct}%</strong>
               </div>
+              <div class="bar-track"><div class="bar-fill" style="width:${sPct}%; background:#e6c259;"></div></div>
             </div>
-            <div class="legend-item">
-              <span class="legend-swatch" style="background:#fbbf24;"></span>
-              <div>
-                <strong>Rarely Practice (${pRarely}%)</strong>
-                <span>High risk of foodborne exposure</span>
+
+            <div class="bdown-row">
+              <div class="bdown-meta">
+                <span><i class="swatch-dot" style="background:#f0655b;"></i> <strong>No</strong> (Not practiced)</span>
+                <strong>${activeP.no} responses • ${nPct}%</strong>
               </div>
+              <div class="bar-track"><div class="bar-fill" style="width:${nPct}%; background:#f0655b;"></div></div>
             </div>
           </div>
         </div>
       `;
     }
+
+    // -----------------------------------------------------------------------
+    // SUB-SECTION 04: Auto-Calculated Key Findings + What-If Ranking Simulator
+    // -----------------------------------------------------------------------
+    const byYesDesc = [...data.practices].sort((a, b) => b.yes - a.yes);
+    const bySomeDesc = [...data.practices].sort((a, b) => b.sometimes - a.sometimes);
+    const byNoDesc = [...data.practices].sort((a, b) => b.no - a.no);
+
+    const mostFollowed = byYesDesc[0];
+    const leastFollowed = byYesDesc[byYesDesc.length - 1];
+    const highestSome = bySomeDesc[0];
+    const highestNo = byNoDesc[0];
+
+    if (surveyFindingsCards && mostFollowed && leastFollowed && highestSome && highestNo) {
+      surveyFindingsCards.innerHTML = `
+        <div class="finding-card finding-green">
+          <span class="finding-tag">MOST COMMONLY FOLLOWED</span>
+          <h6 class="finding-habit">${mostFollowed.label}</h6>
+          <div class="finding-big">${fmtPct(mostFollowed.yes, N)}% said “Yes”</div>
+          <span class="finding-sub">${mostFollowed.yes} of ${N} respondents</span>
+        </div>
+        <div class="finding-card finding-coral">
+          <span class="finding-tag">LEAST FOLLOWED</span>
+          <h6 class="finding-habit">${leastFollowed.label}</h6>
+          <div class="finding-big">${fmtPct(leastFollowed.yes, N)}% said “Yes”</div>
+          <span class="finding-sub">${leastFollowed.no} “No” • ${leastFollowed.sometimes} “Sometimes”</span>
+        </div>
+        <div class="finding-card finding-amber">
+          <span class="finding-tag">HIGHEST “SOMETIMES”</span>
+          <h6 class="finding-habit">${highestSome.label}</h6>
+          <div class="finding-big">${fmtPct(highestSome.sometimes, N)}% sometimes</div>
+          <span class="finding-sub">${highestSome.sometimes} respondents follow inconsistently</span>
+        </div>
+        <div class="finding-card finding-coral">
+          <span class="finding-tag">HIGHEST “NO”</span>
+          <h6 class="finding-habit">${highestNo.label}</h6>
+          <div class="finding-big">${fmtPct(highestNo.no, N)}% said “No”</div>
+          <span class="finding-sub">${highestNo.no} of ${N} respondents</span>
+        </div>
+      `;
+    }
+
+    // Ranking Horizontal Bars + What-If Campaign Conversion
+    if (rankingBarsStage) {
+      const convFactor = whatIfConversionPct / 100;
+      let totalBaseYes = 0;
+      let totalProjYes = 0;
+
+      const rankedRows = byYesDesc.map((p, idx) => {
+        const tot = Math.max(1, p.yes + p.sometimes + p.no);
+        const basePct = (p.yes / tot) * 100;
+        const gainedCount = p.sometimes * convFactor;
+        const projYes = p.yes + gainedCount;
+        const projPct = Math.min(100, (projYes / tot) * 100);
+
+        totalBaseYes += basePct;
+        totalProjYes += projPct;
+
+        let barColor = '#8ec947'; // >=60% green
+        if (projPct < 50) barColor = '#f0655b'; // <50% coral
+        else if (projPct < 60) barColor = '#e6c259'; // 50-59% amber
+
+        const gainBadge =
+          whatIfConversionPct > 0
+            ? `<span class="rank-gain-pill">+${(projPct - basePct).toFixed(1)}% via Campaign</span>`
+            : '';
+
+        return `
+          <div class="rank-row">
+            <div class="rank-meta">
+              <span class="rank-lbl"><strong>#${idx + 1}</strong> · ${p.label}</span>
+              <span class="rank-val">
+                ${gainBadge}
+                <strong>${projPct.toFixed(1)}%</strong>
+                <small>(${Math.round(projYes)}/${tot})</small>
+              </span>
+            </div>
+            <div class="bar-track" style="height:12px;">
+              <div class="bar-fill" style="width:${projPct.toFixed(1)}%; background:${barColor};"></div>
+            </div>
+          </div>
+        `;
+      });
+
+      rankingBarsStage.innerHTML = rankedRows.join('');
+
+      const avgBase = (totalBaseYes / byYesDesc.length).toFixed(1);
+      const avgProj = (totalProjYes / byYesDesc.length).toFixed(1);
+
+      if (whatIfPctLabel) {
+        whatIfPctLabel.textContent =
+          whatIfConversionPct === 0
+            ? '0% Converted (Survey Baseline)'
+            : `${whatIfConversionPct}% of “Sometimes” → “Yes”`;
+      }
+      if (whatIfSummaryText) {
+        if (whatIfConversionPct === 0) {
+          whatIfSummaryText.innerHTML = `Baseline average consistent compliance across all 8 practices is <strong>${avgBase}%</strong>. Slide to simulate awareness campaign impact.`;
+        } else {
+          whatIfSummaryText.innerHTML = `Converting <strong>${whatIfConversionPct}%</strong> of “Sometimes” respondents boosts overall community food-hygiene compliance from <strong>${avgBase}% → ${avgProj}%</strong>!`;
+        }
+      }
+    }
   }
 
+  if (whatIfSlider) {
+    whatIfSlider.addEventListener('input', () => {
+      whatIfConversionPct = parseInt(whatIfSlider.value, 10) || 0;
+      renderSurveyDashboard();
+    });
+  }
+
+  // Live Editor Drawer Controls
   if (toggleEditorBtn && editorDrawer) {
     toggleEditorBtn.addEventListener('click', () => {
       editorDrawer.hidden = !editorDrawer.hidden;
@@ -1131,49 +1434,450 @@
 
   if (applySurveyBtn) {
     applySurveyBtn.addEventListener('click', () => {
-      const clampPct = (id, fallback) => {
-        const el = document.getElementById(id);
-        const v = el ? parseInt(el.value, 10) : fallback;
-        return Number.isNaN(v) ? fallback : Math.min(100, Math.max(0, v));
-      };
       const totalEl = document.getElementById('inp-total');
-      const totalVal = totalEl ? Math.max(1, parseInt(totalEl.value, 10) || 120) : 120;
+      const newTotal = totalEl ? Math.max(1, parseInt(totalEl.value, 10) || 55) : 55;
+
+      const updatedPractices = OFFICIAL_SURVEY_N55.practices.map((orig) => {
+        const inp = document.getElementById(`inp-${orig.key}`);
+        const rawYes = inp ? parseInt(inp.value, 10) : orig.yes;
+        const yesCount = Number.isNaN(rawYes)
+          ? orig.yes
+          : Math.min(newTotal, Math.max(0, rawYes));
+        const rem = Math.max(0, newTotal - yesCount);
+        const origRem = Math.max(1, orig.sometimes + orig.no);
+        const someCount = Math.round(rem * (orig.sometimes / origRem));
+        const noCount = Math.max(0, rem - someCount);
+        return {
+          ...orig,
+          yes: yesCount,
+          sometimes: someCount,
+          no: noCount,
+        };
+      });
 
       surveyState = {
         isCustom: true,
-        total: totalVal,
-        hand: clampPct('inp-hand', 74),
-        storage: clampPct('inp-storage', 61),
-        sep: clampPct('inp-sep', 52),
-        outside: clampPct('inp-outside', 68),
-        always: clampPct('inp-always', 45),
-        sometimes: clampPct('inp-sometimes', 38),
-        rarely: clampPct('inp-rarely', 17),
+        liveMerged: false,
+        total: newTotal,
+        ageGroups: OFFICIAL_SURVEY_N55.ageGroups.map((a) => ({ ...a })),
+        practices: updatedPractices,
       };
       renderSurveyDashboard();
+      renderBenchmarker();
       if (editorDrawer) editorDrawer.hidden = true;
     });
   }
 
   if (resetSurveyBtn) {
     resetSurveyBtn.addEventListener('click', () => {
-      surveyState = { ...DEFAULT_SURVEY };
-      const setVal = (id, v) => {
-        const el = document.getElementById(id);
-        if (el) el.value = String(v);
-      };
-      setVal('inp-total', DEFAULT_SURVEY.total);
-      setVal('inp-hand', DEFAULT_SURVEY.hand);
-      setVal('inp-storage', DEFAULT_SURVEY.storage);
-      setVal('inp-sep', DEFAULT_SURVEY.sep);
-      setVal('inp-outside', DEFAULT_SURVEY.outside);
-      setVal('inp-always', DEFAULT_SURVEY.always);
-      setVal('inp-sometimes', DEFAULT_SURVEY.sometimes);
-      setVal('inp-rarely', DEFAULT_SURVEY.rarely);
+      surveyState = cloneSurvey(OFFICIAL_SURVEY_N55);
+      const totalEl = document.getElementById('inp-total');
+      if (totalEl) totalEl.value = '55';
+      OFFICIAL_SURVEY_N55.practices.forEach((p) => {
+        const inp = document.getElementById(`inp-${p.key}`);
+        if (inp) inp.value = String(p.yes);
+      });
+      if (whatIfSlider) {
+        whatIfSlider.value = '0';
+        whatIfConversionPct = 0;
+      }
       renderSurveyDashboard();
+      renderBenchmarker();
     });
   }
+
+  // -------------------------------------------------------------------------
+  // 📊 1-CLICK RAW CSV EXPORT (n = 55 Empirical Dataset)
+  // -------------------------------------------------------------------------
+  if (exportCsvBtn) {
+    exportCsvBtn.addEventListener('click', () => {
+      const data = getActiveSurveyDataset();
+      const N = Math.max(1, data.total);
+      const lines = [
+        'NCSC 2026-27 EMPIRICAL SURVEY DATASET - FOOD & HYGIENE HABITS AMONGST PEOPLE',
+        `Total Respondents (n),${N}`,
+        '',
+        'PART 1: RESPONDENT AGE-GROUP DISTRIBUTION',
+        'Age Group,Respondents,Percentage (%)',
+      ];
+      data.ageGroups.forEach((g) => {
+        lines.push(`"${g.group}",${g.count},${fmtPct(g.count, 55)}%`);
+      });
+      lines.push('');
+      lines.push('PART 2: 8 HYGIENE PRACTICES ASSESSED');
+      lines.push('Practice,Short Label,Yes (Count),Yes (%),Sometimes (Count),Sometimes (%),No (Count),No (%)');
+      data.practices.forEach((p) => {
+        const tot = Math.max(1, p.yes + p.sometimes + p.no);
+        lines.push(
+          `"${p.label}","${p.short}",${p.yes},${fmtPct(p.yes, tot)}%,${p.sometimes},${fmtPct(
+            p.sometimes,
+            tot
+          )}%,${p.no},${fmtPct(p.no, tot)}%`
+        );
+      });
+
+      const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `FoodSafe_NCSC_Survey_n${N}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  // -------------------------------------------------------------------------
+  // 🧪 LIVE SELF-BENCHMARKER ("Compare Yourself to Our n = 55 Survey")
+  // -------------------------------------------------------------------------
+  const benchListEl = document.getElementById('bench-questions-list');
+  const benchScoreBadge = document.getElementById('bench-score-badge');
+  const benchVerdictTitle = document.getElementById('bench-verdict-title');
+  const benchVerdictSub = document.getElementById('bench-verdict-sub');
+  const btnMergeLive = document.getElementById('btn-merge-live-response');
+
+  function renderBenchmarker() {
+    if (!benchListEl) return;
+    const data = getActiveSurveyDataset();
+    const N = Math.max(1, data.total);
+
+    benchListEl.innerHTML = data.practices
+      .map((p) => {
+        const userAns = userBenchAnswers[p.key] || 'yes';
+        const peerYesPct = fmtPct(p.yes, N);
+        return `
+          <div class="bench-item-row">
+            <div class="bench-item-info">
+              <span class="bench-item-name">${p.short}</span>
+              <span class="bench-item-peer">Survey “Yes”: ${peerYesPct}%</span>
+            </div>
+            <div class="bench-ans-group" data-bench-key="${p.key}">
+              <button type="button" class="bench-opt ${userAns === 'yes' ? 'is-yes' : ''}" data-ans="yes">Yes</button>
+              <button type="button" class="bench-opt ${userAns === 'sometimes' ? 'is-some' : ''}" data-ans="sometimes">Sometimes</button>
+              <button type="button" class="bench-opt ${userAns === 'no' ? 'is-no' : ''}" data-ans="no">No</button>
+            </div>
+          </div>
+        `;
+      })
+      .join('');
+
+    benchListEl.querySelectorAll('.bench-ans-group').forEach((grp) => {
+      const key = grp.getAttribute('data-bench-key');
+      grp.querySelectorAll('.bench-opt').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          userBenchAnswers[key] = btn.getAttribute('data-ans') || 'yes';
+          renderBenchmarker();
+          if (surveyState.liveMerged) {
+            renderSurveyDashboard();
+          }
+        });
+      });
+    });
+
+    // Compute user score (Yes = 1 pt, Sometimes = 0.5 pt, No = 0 pt)
+    let pts = 0;
+    let yesCnt = 0;
+    data.practices.forEach((p) => {
+      const a = userBenchAnswers[p.key] || 'yes';
+      if (a === 'yes') {
+        pts += 1;
+        yesCnt += 1;
+      } else if (a === 'sometimes') {
+        pts += 0.5;
+      }
+    });
+    const userYesPct = Math.round((yesCnt / data.practices.length) * 100);
+    const userWeightedPct = Math.round((pts / data.practices.length) * 100);
+    const surveyAvgYes = 61.6;
+    const diff = (userYesPct - surveyAvgYes).toFixed(1);
+
+    if (benchScoreBadge) {
+      benchScoreBadge.textContent = `YOUR “YES” RATE: ${userYesPct}% (${yesCnt}/8)`;
+    }
+    if (benchVerdictTitle) {
+      if (userYesPct >= surveyAvgYes) {
+        benchVerdictTitle.textContent = `Above Survey Average (+${diff}% Consistent)`;
+        benchVerdictTitle.style.color = '#8ec947';
+      } else {
+        benchVerdictTitle.textContent = `Below Survey Average (${diff}% Gap)`;
+        benchVerdictTitle.style.color = '#e6c259';
+      }
+    }
+    if (benchVerdictSub) {
+      benchVerdictSub.textContent = `You practice ${yesCnt} of 8 habits consistently (${userYesPct}% vs. 61.6% n=55 study average · Overall index: ${userWeightedPct}%).`;
+    }
+    if (btnMergeLive) {
+      btnMergeLive.textContent = surveyState.liveMerged
+        ? '✓ Merged into Live Charts (n = 56) · Click to Undo'
+        : '+ Add My Response to Charts (n = 56)';
+    }
+  }
+
+  if (btnMergeLive) {
+    btnMergeLive.addEventListener('click', () => {
+      surveyState.liveMerged = !surveyState.liveMerged;
+      renderSurveyDashboard();
+      renderBenchmarker();
+    });
+  }
+
+  // -------------------------------------------------------------------------
+  // 🌡️ TEMPERATURE DANGER ZONE (5°C–60°C) BACTERIAL GROWTH SIMULATOR
+  // -------------------------------------------------------------------------
+  const tempSlider = document.getElementById('danger-temp-slider');
+  const timeSlider = document.getElementById('danger-time-slider');
+  const tempLabel = document.getElementById('danger-temp-label');
+  const timeLabel = document.getElementById('danger-time-label');
+  const statusBadge = document.getElementById('danger-status-badge');
+  const bacteriaCountEl = document.getElementById('danger-bacteria-count');
+  const doublingNoteEl = document.getElementById('danger-doubling-note');
+  const dangerExplainEl = document.getElementById('danger-explain-text');
+  const petriDishEl = document.getElementById('petri-dish');
+
+  function renderDangerZoneSim() {
+    if (!tempSlider || !timeSlider) return;
+    const temp = parseFloat(tempSlider.value) || 32;
+    const hours = parseFloat(timeSlider.value) || 3;
+
+    let zoneName = '';
+    let badgeText = '';
+    let badgeColor = '';
+    let doublingsPerHour = 0;
+    let noteText = '';
+    let explainText = '';
+
+    if (temp < 5) {
+      zoneName = `${temp}°C (Refrigerator Safe Zone)`;
+      badgeText = '❄️ SAFE CHILL (<5°C)';
+      badgeColor = '#8ec947';
+      doublingsPerHour = 0.08;
+      noteText = 'Dormant / negligible multiplication below 5°C';
+      explainText =
+        'Refrigerating perishables below 5°C halts rapid bacterial growth. Remember: 44% of our survey respondents were inconsistent with safe storage!';
+    } else if (temp > 60) {
+      zoneName = `${temp}°C (Thermal Cooking Zone)`;
+      badgeText = '🔥 PATHOGENS DESTROYED (>60°C)';
+      badgeColor = '#8ec947';
+      doublingsPerHour = 0;
+      noteText = 'Active bacteria are killed above 60°C–75°C';
+      explainText =
+        'Cooking or reheating food thoroughly above 60°C–75°C destroys active vegetative bacteria like Salmonella and E. coli.';
+    } else {
+      // Inside 5°C - 60°C Danger Zone
+      zoneName = `${temp}°C (Temperature Danger Zone!)`;
+      badgeText = '⚠️ DANGER ZONE (5°C–60°C)';
+      badgeColor = '#f0655b';
+      // Peak growth around 35-37°C (~3 doublings per hour = every 20 mins)
+      const distFromPeak = Math.abs(36 - temp);
+      doublingsPerHour = Math.max(0.5, 3.0 - (distFromPeak / 31) * 2.2);
+      const minsPerDouble = Math.round(60 / doublingsPerHour);
+      noteText = `Doubles every ~${minsPerDouble} mins at ${temp}°C`;
+      explainText = `At ${temp}°C for ${hours.toFixed(
+        1
+      )} hrs, a single bacterium multiplies exponentially. Never leave cooked food or dairy in the 5°C–60°C zone for over 2 hours!`;
+    }
+
+    const totalGenerations = doublingsPerHour * hours;
+    const bacteriaCount =
+      temp > 60 ? 0 : Math.max(1, Math.round(Math.pow(2, totalGenerations)));
+
+    if (tempLabel) tempLabel.textContent = zoneName;
+    if (timeLabel) timeLabel.textContent = `${hours.toFixed(1)} Hours`;
+    if (statusBadge) {
+      statusBadge.textContent = badgeText;
+      statusBadge.style.borderColor = badgeColor;
+      statusBadge.style.color = badgeColor;
+    }
+    if (bacteriaCountEl) {
+      bacteriaCountEl.textContent =
+        bacteriaCount === 0
+          ? '0 (Eliminated)'
+          : bacteriaCount.toLocaleString('en-IN');
+      bacteriaCountEl.style.color =
+        bacteriaCount > 64 ? '#f0655b' : bacteriaCount > 8 ? '#e6c259' : '#8ec947';
+    }
+    if (doublingNoteEl) doublingNoteEl.textContent = noteText;
+    if (dangerExplainEl) dangerExplainEl.textContent = explainText;
+
+    // Render visual colonies inside Petri Dish
+    if (petriDishEl) {
+      const dotCount =
+        bacteriaCount === 0 ? 0 : Math.min(90, Math.max(1, Math.ceil(Math.log2(bacteriaCount + 1) * 5)));
+      let dotsHtml = '';
+      for (let i = 0; i < dotCount; i++) {
+        // Deterministic pseudo-random radial coordinates
+        const angle = i * 2.39996; // golden angle
+        const r = Math.min(42, Math.sqrt(i + 1) * 4.4);
+        const x = 50 + r * Math.cos(angle);
+        const y = 50 + r * Math.sin(angle);
+        const sz = i % 3 === 0 ? 6 : 4;
+        const col = temp >= 5 && temp <= 60 ? '#f0655b' : '#8ec947';
+        dotsHtml += `<span class="petri-dot" style="left:${x.toFixed(1)}%; top:${y.toFixed(
+          1
+        )}%; width:${sz}px; height:${sz}px; background:${col};"></span>`;
+      }
+      petriDishEl.innerHTML = dotsHtml;
+    }
+  }
+
+  if (tempSlider) tempSlider.addEventListener('input', renderDangerZoneSim);
+  if (timeSlider) timeSlider.addEventListener('input', renderDangerZoneSim);
+
+  // -------------------------------------------------------------------------
+  // 📋 NCSC JURY EXECUTIVE BRIEF MODAL, 2-MIN PITCH DECK & KEYS 1-6 DOCK
+  // -------------------------------------------------------------------------
+  const juryModalBackdrop = document.getElementById('jury-modal-backdrop');
+  const btnOpenJuryBrief = document.getElementById('btn-open-jury-brief');
+  const hudJuryBriefBtn = document.getElementById('hud-jury-brief-btn');
+  const btnCloseJuryModal = document.getElementById('btn-close-jury-modal');
+  const btnPrintJuryBrief = document.getElementById('btn-print-jury-brief');
+  const juryTabs = document.querySelectorAll('[data-jury-tab]');
+  const paneAbstract = document.getElementById('jury-pane-abstract');
+  const panePitch = document.getElementById('jury-pane-pitch');
+
+  function openJuryModal() {
+    if (juryModalBackdrop) juryModalBackdrop.hidden = false;
+  }
+  function closeJuryModal() {
+    if (juryModalBackdrop) juryModalBackdrop.hidden = true;
+  }
+
+  if (btnOpenJuryBrief) btnOpenJuryBrief.addEventListener('click', openJuryModal);
+  if (hudJuryBriefBtn) hudJuryBriefBtn.addEventListener('click', openJuryModal);
+  if (btnCloseJuryModal) btnCloseJuryModal.addEventListener('click', closeJuryModal);
+  if (juryModalBackdrop) {
+    juryModalBackdrop.addEventListener('click', (e) => {
+      if (e.target === juryModalBackdrop) closeJuryModal();
+    });
+  }
+  if (btnPrintJuryBrief) {
+    btnPrintJuryBrief.addEventListener('click', () => window.print());
+  }
+
+  juryTabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const target = tab.getAttribute('data-jury-tab');
+      juryTabs.forEach((t) => t.classList.toggle('is-active', t === tab));
+      if (paneAbstract) paneAbstract.hidden = target !== 'abstract';
+      if (panePitch) panePitch.hidden = target !== 'pitch';
+    });
+  });
+
+  const PITCH_SLIDES = [
+    {
+      badge: 'SLIDE 01 / 05',
+      time: '⏱️ 0:00 – 0:25 · THE PROBLEM',
+      title: '1. Why Food Hygiene Matters Globally & Locally',
+      body: 'According to the WHO, over 866 million foodborne illnesses and 1.52 million deaths occur globally every year. Yet foodborne disease is preventable—because food safety is a 5-stage chain (Preparation → Cooking → Storage → Serving → Consumption) driven by everyday household habits.',
+      talk: '“Judges, our study asks a fundamental question: If people know clean food matters, why do foodborne illnesses still happen at home and outside?”',
+      link: '#prologue',
+    },
+    {
+      badge: 'SLIDE 02 / 05',
+      time: '⏱️ 0:25 – 0:55 · EMPIRICAL SURVEY (n = 55)',
+      title: '2. Primary Questionnaire Survey Across 5 Age Groups (n = 55)',
+      body: 'We conducted a primary questionnaire survey of 55 respondents across 5 age brackets (13–17 yrs: 25.5%, 18–25 yrs: 29.1%, 26–40 yrs: 23.6%, 41–60 yrs: 16.4%, 60+ yrs: 5.5%), assessing 8 everyday food-hygiene practices using a 3-point scale (Yes / Sometimes / No).',
+      talk: '“Rather than relying on assumptions, we collected empirical data from 55 respondents across 8 essential habits.”',
+      link: '#survey-part-01',
+    },
+    {
+      badge: 'SLIDE 03 / 05',
+      time: '⏱️ 0:55 – 1:25 · KEY STATISTICAL DISCOVERIES',
+      title: '3. The Awareness-to-Consistency Gap in Our Data',
+      body: 'Visible habits like Handwashing (78.2% Yes) and Covering Cooked Food (74.5% Yes) scored high. However, critical microbiological safeguards dropped sharply: Separating Raw & Cooked Food (43.6% Yes, 30.9% Sometimes, 25.5% No), Outside Food Hygiene (49.1% Yes), and Checking Expiry Dates (52.7% Yes).',
+      talk: '“Notice our #1 finding: 4 out of 8 practices are followed consistently by under 60% of people—not only due to lack of awareness, but because up to 30.9% practice them only Sometimes.”',
+      link: '#survey-part-03',
+    },
+    {
+      badge: 'SLIDE 04 / 05',
+      time: '⏱️ 1:25 – 1:45 · SCIENTIFIC SIMULATION',
+      title: '4. Demonstrating Why “Sometimes” Is Risky (Danger Zone Sim)',
+      body: 'In our survey, 44% of respondents were inconsistent with safe perishable storage. Our interactive 5°C–60°C Temperature Danger Zone simulator demonstrates how a single bacterium doubles every 20 minutes at warm room temperature—reaching hundreds of colonies within hours.',
+      talk: '“With our live simulator, anyone—including you on the jury—can test their own 8 habits against our 55 respondents in 15 seconds.”',
+      link: '#survey-live-sim',
+    },
+    {
+      badge: 'SLIDE 05 / 05',
+      time: '⏱️ 1:45 – 2:00 · DIGITAL INTERVENTION & IMPACT',
+      title: '5. From Survey Findings to Daily Habit Change',
+      body: 'Our What-If Intervention model shows that converting “Sometimes” respondents to “Yes” raises community compliance from 61.6% to 85.2%. To achieve this, we built the 3-Level Unlockable Guide, 5 Storyboards, 11-Question Quiz, 7-Day Habit Tracker, and Custom NCSC Poster Studio.',
+      talk: '“Food safety is not just knowledge—it is a daily habit. Learn it, Check it, and Change it. Thank you!”',
+      link: '#lab-challenge',
+    },
+  ];
+
+  let pitchIdx = 0;
+  const pitchStepBadge = document.getElementById('pitch-step-badge');
+  const pitchTimeTag = document.getElementById('pitch-time-tag');
+  const pitchSlideTitle = document.getElementById('pitch-slide-title');
+  const pitchSlideBody = document.getElementById('pitch-slide-body');
+  const pitchTalkingPoint = document.getElementById('pitch-talking-point');
+  const pitchJumpLink = document.getElementById('pitch-jump-link');
+  const pitchPrevBtn = document.getElementById('pitch-prev-btn');
+  const pitchNextBtn = document.getElementById('pitch-next-btn');
+
+  function renderPitchSlide() {
+    const s = PITCH_SLIDES[pitchIdx];
+    if (!s) return;
+    if (pitchStepBadge) pitchStepBadge.textContent = s.badge;
+    if (pitchTimeTag) pitchTimeTag.textContent = s.time;
+    if (pitchSlideTitle) pitchSlideTitle.textContent = s.title;
+    if (pitchSlideBody) pitchSlideBody.textContent = s.body;
+    if (pitchTalkingPoint) {
+      pitchTalkingPoint.innerHTML = `<strong>🎤 Presenter Talking Point:</strong> ${s.talk}`;
+    }
+    if (pitchJumpLink) {
+      pitchJumpLink.setAttribute('href', s.link);
+    }
+  }
+
+  if (pitchPrevBtn) {
+    pitchPrevBtn.addEventListener('click', () => {
+      pitchIdx = (pitchIdx - 1 + PITCH_SLIDES.length) % PITCH_SLIDES.length;
+      renderPitchSlide();
+    });
+  }
+  if (pitchNextBtn) {
+    pitchNextBtn.addEventListener('click', () => {
+      pitchIdx = (pitchIdx + 1) % PITCH_SLIDES.length;
+      renderPitchSlide();
+    });
+  }
+  if (pitchJumpLink) {
+    pitchJumpLink.addEventListener('click', () => {
+      closeJuryModal();
+    });
+  }
+
+  // Keyboard shortcuts 1–6 for instant smooth presentation navigation
+  const KEY_TARGETS = {
+    '1': '#hero',
+    '2': '#prologue',
+    '3': '#lab-survey',
+    '4': '#survey-live-sim',
+    '5': '#lab-quiz',
+    '6': '#lab-challenge',
+  };
+
+  window.addEventListener('keydown', (e) => {
+    const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
+    if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+    if (e.key === 'Escape' && juryModalBackdrop && !juryModalBackdrop.hidden) {
+      closeJuryModal();
+      return;
+    }
+    const sel = KEY_TARGETS[e.key];
+    if (sel) {
+      const targetEl = document.querySelector(sel);
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  });
+
   renderSurveyDashboard();
+  renderBenchmarker();
+  renderDangerZoneSim();
+  renderPitchSlide();
 
   // ==========================================================================
   // 11. LAB MODULE 05A : 🏆 7-DAY FOOD HYGIENE CHALLENGE TRACKER

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -171,14 +171,23 @@
   </div>
 </section>
 
-<!-- Fixed Live NCSC Telemetry Pill (Bottom Center) -->
-<div class="alley-hud" aria-live="polite">
+<!-- Fixed Live NCSC Telemetry + Interactive Jury Presentation Dock (Bottom Center) -->
+<div class="alley-hud" aria-label="Jury Presentation Quick-Jump Dock">
   <span class="hud-dot"></span>
   <span class="hud-metric" id="hud-depth">FOODSAFE · NCSC 2026–27</span>
   <span class="hud-sep">·</span>
   <span class="hud-metric" id="hud-gate">SECTION 01 / 09</span>
   <span class="hud-sep hud-hide-mobile">·</span>
-  <span class="hud-hint hud-hide-mobile" id="hud-mode">LIVING FOOD &amp; HYGIENE PLATFORM</span>
+  <span class="hud-hint hud-hide-mobile" id="hud-mode" hidden>LIVING FOOD &amp; HYGIENE PLATFORM</span>
+  <nav class="presenter-dock-links hud-hide-mobile" aria-label="Presentation Quick Jump (Keys 1 to 6)">
+    <a href="#hero" class="pres-pill" data-pres-key="1" title="Shortcut: Key 1">1·Hero</a>
+    <a href="#prologue" class="pres-pill" data-pres-key="2" title="Shortcut: Key 2">2·Problem</a>
+    <a href="#lab-survey" class="pres-pill pres-pill-accent" data-pres-key="3" title="Shortcut: Key 3">3·Survey (n=55)</a>
+    <a href="#survey-live-sim" class="pres-pill" data-pres-key="4" title="Shortcut: Key 4">4·Danger Sim</a>
+    <a href="#lab-quiz" class="pres-pill" data-pres-key="5" title="Shortcut: Key 5">5·Quiz &amp; Lab</a>
+    <a href="#lab-challenge" class="pres-pill" data-pres-key="6" title="Shortcut: Key 6">6·Action</a>
+  </nav>
+  <button type="button" class="pres-brief-btn" id="hud-jury-brief-btn" title="Open NCSC Jury Brief & 2-Min Pitch">📋 Jury Brief</button>
 </div>
 
 <!-- Main Scroll Container (All NCSC 2026-27 Data & Interactive Modules) -->
@@ -892,81 +901,421 @@
       </section>
 
       <!-- ===================================================================
-           LAB MODULE 04 : NCSC SURVEY DASHBOARD (BAR CHART, PIE CHART & LIVE EDITOR)
+           LAB MODULE 04 : NCSC EMPIRICAL SURVEY & ANALYSIS (n = 55, 6 PARTS)
            =================================================================== -->
       <section class="lab-section" id="lab-survey" data-nav-idx="7">
-        <div class="glass-panel">
-          <div class="panel-header">
+        <div class="glass-panel survey-master-panel">
+
+          <!-- Top Header & Presentation Action Controls -->
+          <div class="panel-header survey-top-header">
             <div>
-              <span class="panel-eyebrow">NCSC EMPIRICAL DATA VISUALISATION</span>
-              <h3 class="panel-title">📊 Food &amp; Hygiene Survey Dashboard</h3>
-              <p class="panel-sub">Interactive visualisation of respondent hygiene habits — supports live data entry for field survey results.</p>
+              <span class="panel-eyebrow">FOOD &amp; HYGIENE HABITS SURVEY · EMPIRICAL STUDY (n = 55)</span>
+              <h3 class="panel-title">📊 Survey and Analysis of Food &amp; Hygiene Practices</h3>
+              <p class="panel-sub">
+                A questionnaire-based study of <strong>55 respondents</strong> examining everyday food-hygiene habits,
+                awareness levels, and behavioral consistency across 8 essential practices.
+              </p>
             </div>
             <div class="survey-mode-controls">
-              <span class="mode-pill" id="survey-mode-pill">DEMO / ILLUSTRATIVE DATA (N = 120)</span>
-              <button type="button" class="btn-vermilion-sm" id="toggle-survey-editor">✏️ Edit / Enter Actual Survey Data</button>
+              <span class="mode-pill" id="survey-mode-pill">OFFICIAL NCSC SURVEY (n = 55)</span>
+              <button type="button" class="btn-glass-sm" id="btn-export-survey-csv" title="Download raw n=55 dataset as CSV">📊 Download CSV</button>
+              <button type="button" class="btn-glass-sm" id="btn-open-jury-brief" title="Open 1-page NCSC Jury Abstract & Guided Pitch">📋 Jury Brief &amp; Pitch</button>
+              <button type="button" class="btn-vermilion-sm" id="toggle-survey-editor">✏️ Customize Data</button>
             </div>
           </div>
 
-          <!-- Live Survey Data Editor Drawer -->
+          <!-- Live Survey Data Editor Drawer (Allows custom field overrides or 1-click reset to n=55) -->
           <div class="survey-editor-drawer" id="survey-editor-drawer" hidden>
-            <h4 class="editor-title">Enter Actual NCSC Survey Results</h4>
+            <div class="editor-drawer-head">
+              <h4 class="editor-title">✏️ Customize / Test Live Survey Dataset (Yes Counts out of Total N)</h4>
+              <span class="panel-badge">DEFAULT: OFFICIAL n = 55 STUDY</span>
+            </div>
             <div class="editor-inputs-grid">
-              <label>Total Respondents (N)<input type="number" id="inp-total" value="120" min="1" max="10000" /></label>
-              <label>Hand Hygiene (%)<input type="number" id="inp-hand" value="74" min="0" max="100" /></label>
-              <label>Food Storage (%)<input type="number" id="inp-storage" value="61" min="0" max="100" /></label>
-              <label>Raw/Cooked Sep (%)<input type="number" id="inp-sep" value="52" min="0" max="100" /></label>
-              <label>Outside Food (%)<input type="number" id="inp-outside" value="68" min="0" max="100" /></label>
-              <label>Always Practice (%)<input type="number" id="inp-always" value="45" min="0" max="100" /></label>
-              <label>Sometimes (%)<input type="number" id="inp-sometimes" value="38" min="0" max="100" /></label>
-              <label>Rarely (%)<input type="number" id="inp-rarely" value="17" min="0" max="100" /></label>
+              <label>Total Respondents (n)<input type="number" id="inp-total" value="55" min="1" max="10000" /></label>
+              <label>Handwashing ("Yes" count)<input type="number" id="inp-handwashing" value="43" min="0" max="10000" /></label>
+              <label>Cover Cooked Food ("Yes")<input type="number" id="inp-covering" value="41" min="0" max="10000" /></label>
+              <label>Clean Utensils ("Yes")<input type="number" id="inp-utensils" value="39" min="0" max="10000" /></label>
+              <label>Wash Fruits &amp; Veg ("Yes")<input type="number" id="inp-washing" value="37" min="0" max="10000" /></label>
+              <label>Safe Storage ("Yes")<input type="number" id="inp-storage" value="31" min="0" max="10000" /></label>
+              <label>Check Expiry ("Yes")<input type="number" id="inp-expiry" value="29" min="0" max="10000" /></label>
+              <label>Hygiene Outside ("Yes")<input type="number" id="inp-outside" value="27" min="0" max="10000" /></label>
+              <label>Separate Raw/Cooked ("Yes")<input type="number" id="inp-separating" value="24" min="0" max="10000" /></label>
             </div>
             <div class="editor-actions">
-              <button type="button" class="btn-vermilion-sm" id="apply-survey-data">Apply Live Survey Data</button>
-              <button type="button" class="btn-glass-sm" id="reset-survey-data">Reset to Demo Data</button>
+              <button type="button" class="btn-vermilion-sm" id="apply-survey-data">Apply Custom Counts</button>
+              <button type="button" class="btn-glass-sm" id="reset-survey-data">↻ Reset to Official Study (n = 55)</button>
             </div>
           </div>
 
-          <!-- 5 KPI Metric Cards -->
-          <div class="survey-kpi-row" id="survey-kpi-row">
-            <div class="kpi-card">
-              <span class="kpi-val" id="kpi-total">120</span>
-              <span class="kpi-lbl">TOTAL RESPONDENTS</span>
+          <!-- ===============================================================
+               SUB-SECTION 01 · SURVEY OVERVIEW (4 METADATA CARDS)
+               =============================================================== -->
+          <div class="survey-subblock" id="survey-part-01">
+            <div class="survey-subhead">
+              <span class="survey-step-num">01</span>
+              <div>
+                <span class="survey-step-eyebrow">SURVEY OVERVIEW</span>
+                <h4 class="survey-step-title">Study Scope &amp; Methodology</h4>
+              </div>
             </div>
-            <div class="kpi-card">
-              <span class="kpi-val" id="kpi-hand">74%</span>
-              <span class="kpi-lbl">HAND HYGIENE</span>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-val" id="kpi-storage">61%</span>
-              <span class="kpi-lbl">FOOD STORAGE</span>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-val" id="kpi-sep">52%</span>
-              <span class="kpi-lbl">RAW / COOKED SEPARATION</span>
-            </div>
-            <div class="kpi-card">
-              <span class="kpi-val" id="kpi-outside">68%</span>
-              <span class="kpi-lbl">OUTSIDE FOOD AWARENESS</span>
+
+            <div class="survey-overview-grid">
+              <div class="kpi-card">
+                <span class="kpi-lbl">TOTAL RESPONDENTS</span>
+                <span class="kpi-val" id="kpi-total">55</span>
+                <span class="kpi-sub">Completed questionnaire responses</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-lbl">SURVEY TYPE</span>
+                <span class="kpi-val kpi-val-text">Questionnaire-based</span>
+                <span class="kpi-sub">Primary descriptive data collection</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-lbl">STUDY FOCUS</span>
+                <span class="kpi-val kpi-val-text">Food &amp; Hygiene Habits</span>
+                <span class="kpi-sub">Everyday awareness &amp; practices</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-lbl">KEY AREAS ASSESSED</span>
+                <span class="kpi-val kpi-val-text">4 Core Domains</span>
+                <span class="kpi-sub">Personal Hygiene • Food Handling • Storage • Safety</span>
+              </div>
             </div>
           </div>
 
-          <!-- Bar Chart + Donut/Pie Chart -->
-          <div class="survey-charts-grid">
+          <!-- ===============================================================
+               SUB-SECTION 02 · RESPONDENT PROFILE (AGE-GROUP DISTRIBUTION)
+               =============================================================== -->
+          <div class="survey-subblock" id="survey-part-02">
+            <div class="survey-subhead">
+              <span class="survey-step-num">02</span>
+              <div>
+                <span class="survey-step-eyebrow">RESPONDENT PROFILE</span>
+                <h4 class="survey-step-title">Age-Group Distribution (<span class="js-n-label">n = 55</span>)</h4>
+              </div>
+              <span class="panel-badge">LARGEST COHORT: 18–25 YRS (29.1%)</span>
+            </div>
+
             <div class="chart-box">
-              <h4 class="chart-title">Hygiene Practice Rates (Bar Chart)</h4>
-              <div class="bar-chart-stage" id="bar-chart-stage">
+              <p class="panel-sub" style="margin-bottom: 1rem;">
+                Distribution of survey participants across five age brackets, representing school students, youth, working adults, and seniors.
+              </p>
+              <div class="age-bars-grid" id="age-distribution-stage">
                 <!-- Populated dynamically by app.js -->
               </div>
             </div>
+          </div>
 
-            <div class="chart-box">
-              <h4 class="chart-title">Overall Practice Frequency (Distribution)</h4>
-              <div class="pie-chart-stage" id="pie-chart-stage">
-                <!-- SVG Donut Chart + Legend populated by app.js -->
+          <!-- ===============================================================
+               SUB-SECTION 03 · HYGIENE PRACTICES (STACKED BARS + PILL DONUT)
+               =============================================================== -->
+          <div class="survey-subblock" id="survey-part-03">
+            <div class="survey-subhead">
+              <span class="survey-step-num">03</span>
+              <div>
+                <span class="survey-step-eyebrow">HYGIENE PRACTICES ASSESSED</span>
+                <h4 class="survey-step-title">8 Everyday Food &amp; Hygiene Practices — Yes / Sometimes / No</h4>
+              </div>
+              <div class="stacked-legend-inline">
+                <span><i class="swatch-dot" style="background:#8ec947;"></i> Yes (Consistent)</span>
+                <span><i class="swatch-dot" style="background:#e6c259;"></i> Sometimes (Inconsistent)</span>
+                <span><i class="swatch-dot" style="background:#f0655b;"></i> No (Not Followed)</span>
+              </div>
+            </div>
+
+            <div class="survey-charts-grid">
+              <!-- Left: 8-Practice 100% Stacked Comparison Chart -->
+              <div class="chart-box">
+                <h5 class="chart-title">Practice Comparison (Yes / Sometimes / No across 8 Habits)</h5>
+                <p class="panel-sub" style="margin-bottom: 0.95rem;">
+                  Click any practice row below to inspect its detailed response breakdown on the right.
+                </p>
+                <div class="stacked-chart-stage" id="stacked-practice-stage">
+                  <!-- Populated dynamically by app.js -->
+                </div>
+              </div>
+
+              <!-- Right: Interactive Practice Selector Pills + Donut + Breakdown -->
+              <div class="chart-box">
+                <div class="breakdown-top">
+                  <h5 class="chart-title" style="margin-bottom:0.25rem;">Interactive Response Breakdown</h5>
+                  <p class="panel-sub">Select a practice pill to inspect exact counts out of <span class="js-n-label">55</span> respondents:</p>
+                </div>
+
+                <div class="practice-pills-wrap" id="practice-pills-wrap">
+                  <!-- 8 Practice Selector Pills populated by app.js -->
+                </div>
+
+                <div class="practice-detail-stage" id="practice-detail-stage">
+                  <!-- SVG Donut + Yes/Sometimes/No progress bars populated by app.js -->
+                </div>
               </div>
             </div>
           </div>
+
+          <!-- ===============================================================
+               SUB-SECTION 04 · KEY FINDINGS & "WHAT-IF" INTERVENTION SIMULATOR
+               =============================================================== -->
+          <div class="survey-subblock" id="survey-part-04">
+            <div class="survey-subhead">
+              <span class="survey-step-num">04</span>
+              <div>
+                <span class="survey-step-eyebrow">KEY STATISTICAL FINDINGS</span>
+                <h4 class="survey-step-title">Highlights &amp; Practice Ranking (Strongest to Weakest)</h4>
+              </div>
+            </div>
+
+            <!-- 4 Auto-Calculated Insight Cards -->
+            <div class="findings-4grid" id="survey-findings-cards">
+              <!-- Populated dynamically by app.js -->
+            </div>
+
+            <!-- Practice Ranking + Live "What-If" Awareness Campaign Simulator -->
+            <div class="chart-box" style="margin-top: 1.15rem;">
+              <div class="ranking-header-row">
+                <div>
+                  <h5 class="chart-title" style="margin-bottom:0.25rem;">Practice Ranking — Percentage Who Answered “Yes”</h5>
+                  <p class="panel-sub">
+                    Color-coded by compliance tier: <strong class="text-crimson">≥60% Strong (Green)</strong> ·
+                    <strong style="color:#e6c259;">50–59% Moderate (Amber)</strong> ·
+                    <strong style="color:#f0655b;">&lt;50% Critical Gap (Coral)</strong>
+                  </p>
+                </div>
+
+                <!-- 📈 "What-If" Intervention Impact Control -->
+                <div class="whatif-control-box">
+                  <div class="whatif-top">
+                    <span class="whatif-tag">📈 SIMULATE CAMPAIGN IMPACT</span>
+                    <strong class="whatif-val" id="whatif-pct-label">0% Converted (Baseline)</strong>
+                  </div>
+                  <input type="range" id="whatif-slider" min="0" max="100" step="10" value="0" aria-label="Simulate converting Sometimes respondents to Yes" />
+                  <p class="whatif-caption" id="whatif-summary-text">
+                    Slide to see how converting “Sometimes” respondents to “Yes” raises community compliance from <strong>61.6%</strong>.
+                  </p>
+                </div>
+              </div>
+
+              <div class="ranking-bars-stage" id="ranking-bars-stage">
+                <!-- Populated dynamically by app.js -->
+              </div>
+            </div>
+          </div>
+
+          <!-- ===============================================================
+               SUB-SECTION 05 · TWO MAJOR PROBLEMS IDENTIFIED & COMMON MISTAKES
+               =============================================================== -->
+          <div class="survey-subblock" id="survey-part-05">
+            <div class="survey-subhead">
+              <span class="survey-step-num">05</span>
+              <div>
+                <span class="survey-step-eyebrow">DIAGNOSTIC ANALYSIS</span>
+                <h4 class="survey-step-title">Two Major Problems Identified &amp; Common Mistakes in the Data</h4>
+              </div>
+            </div>
+
+            <div class="problems-2grid">
+              <article class="problem-card problem-card-amber">
+                <div class="problem-card-head">
+                  <span class="problem-num">PROBLEM 01</span>
+                  <span class="problem-badge">KNOWLEDGE DEFICIT</span>
+                </div>
+                <h5 class="problem-title">Lack of Awareness</h5>
+                <p class="problem-desc">
+                  Some critical food-safety habits are still not widely recognized or practiced.
+                  In our survey, practices requiring microbiological or label awareness showed the lowest consistent adoption:
+                </p>
+                <ul class="problem-list" id="problem-1-list">
+                  <li><strong>Separating raw and cooked food:</strong> Followed consistently by only <strong>43.6%</strong> (24 of 55).</li>
+                  <li><strong>Considering hygiene while eating outside:</strong> Followed consistently by only <strong>49.1%</strong> (27 of 55).</li>
+                  <li><strong>Checking expiry / use-by information:</strong> Followed consistently by only <strong>52.7%</strong> (29 of 55).</li>
+                </ul>
+              </article>
+
+              <article class="problem-card problem-card-coral">
+                <div class="problem-card-head">
+                  <span class="problem-num">PROBLEM 02</span>
+                  <span class="problem-badge">BEHAVIORAL GAP</span>
+                </div>
+                <h5 class="problem-title">Inconsistent Hygiene Practices</h5>
+                <p class="problem-desc">
+                  Even when people know a food-hygiene rule matters, many follow it only <em>“Sometimes”</em> rather than every day — creating recurring exposure risks:
+                </p>
+                <ul class="problem-list" id="problem-2-list">
+                  <li><strong>Highest “Sometimes” rate:</strong> <em>Separating raw and cooked food</em> is practiced only sometimes by <strong>30.9%</strong> (17 respondents).</li>
+                  <li><strong>Outside food &amp; expiry checks:</strong> <strong>29.1%</strong> and <strong>27.3%</strong> follow these habits only occasionally.</li>
+                  <li><strong>Consistency threshold:</strong> <strong>4 out of 8 practices</strong> are followed consistently by fewer than <strong>60%</strong> of respondents.</li>
+                </ul>
+              </article>
+            </div>
+
+            <!-- 4 Common Mistakes Observed in the Data -->
+            <div class="mistakes-4grid" id="mistakes-4grid">
+              <div class="mistake-card">
+                <span class="mistake-stat">47% INCONSISTENT</span>
+                <h6>Inconsistent Expiry-Date Checking</h6>
+                <p><strong>11 never</strong> and <strong>15 only sometimes</strong> check expiry or use-by dates before buying or consuming packaged food.</p>
+              </div>
+              <div class="mistake-card">
+                <span class="mistake-stat">25.5% SAID “NO”</span>
+                <h6>Poor Separation of Raw &amp; Cooked Food</h6>
+                <p>Highest “No” response of any practice — <strong>14 respondents</strong> do not separate raw meat/produce from cooked meals.</p>
+              </div>
+              <div class="mistake-card">
+                <span class="mistake-stat">44% INCONSISTENT</span>
+                <h6>Improper / Inconsistent Food Storage</h6>
+                <p><strong>10 never</strong> and <strong>14 only sometimes</strong> store perishable food promptly under safe temperature conditions.</p>
+              </div>
+              <div class="mistake-card">
+                <span class="mistake-stat">51% INCONSISTENT</span>
+                <h6>Inconsistent Hygiene Eating Outside</h6>
+                <p><strong>12 never</strong> and <strong>16 only sometimes</strong> verify vendor cleanliness, water quality, or covered food when eating out.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===============================================================
+               LIVE PRESENTATION LAB : PERSONAL BENCHMARKER + DANGER ZONE SIM
+               =============================================================== -->
+          <div class="survey-subblock" id="survey-live-sim">
+            <div class="survey-subhead">
+              <span class="survey-step-num">⚡</span>
+              <div>
+                <span class="survey-step-eyebrow">INTERACTIVE JURY DEMONSTRATION TOOLS</span>
+                <h4 class="survey-step-title">Compare Your Habits to Our 55 Respondents &amp; Simulate Storage Risk</h4>
+              </div>
+            </div>
+
+            <div class="survey-charts-grid">
+              <!-- Left: 🧪 Compare Yourself to Our n = 55 Survey -->
+              <div class="chart-box">
+                <div class="panel-header" style="margin-bottom:0.65rem;">
+                  <div>
+                    <span class="panel-eyebrow">15-SECOND LIVE SELF-BENCHMARK</span>
+                    <h5 class="chart-title" style="margin-bottom:0;">🧪 How Do You Compare to Our n = 55 Survey?</h5>
+                  </div>
+                  <span class="panel-badge" id="bench-score-badge">YOUR SCORE: 75%</span>
+                </div>
+                <p class="panel-sub" style="margin-bottom:0.8rem;">
+                  Tap your honest habit for each of the 8 survey items below to compare your score against our <strong>61.6%</strong> study average:
+                </p>
+
+                <div class="bench-questions-list" id="bench-questions-list">
+                  <!-- Populated by app.js -->
+                </div>
+
+                <div class="bench-result-bar" id="bench-result-bar">
+                  <div>
+                    <strong id="bench-verdict-title">Above Survey Average (+13.4%)</strong>
+                    <p id="bench-verdict-sub">Your consistent compliance is 75% vs. 61.6% across our 55 respondents.</p>
+                  </div>
+                  <button type="button" class="btn-vermilion-sm" id="btn-merge-live-response">
+                    + Add My Response to Charts (n = 56)
+                  </button>
+                </div>
+              </div>
+
+              <!-- Right: 🌡️ Temperature Danger Zone (5°C–60°C) Bacterial Growth Simulator -->
+              <div class="chart-box">
+                <div class="panel-header" style="margin-bottom:0.65rem;">
+                  <div>
+                    <span class="panel-eyebrow">WHY 44% INCONSISTENT STORAGE MATTERS</span>
+                    <h5 class="chart-title" style="margin-bottom:0;">🌡️ Temperature Danger Zone (5°C–60°C) Simulator</h5>
+                  </div>
+                  <span class="panel-badge" id="danger-status-badge">DANGER ZONE</span>
+                </div>
+                <p class="panel-sub" style="margin-bottom:0.9rem;">
+                  In our survey, <strong>44% of respondents</strong> do not consistently refrigerate perishable food. Adjust temperature and time to see how fast bacteria multiply:
+                </p>
+
+                <div class="danger-sim-controls">
+                  <div class="danger-slider-group">
+                    <div class="danger-slider-meta">
+                      <span>Storage Temperature</span>
+                      <strong id="danger-temp-label">32°C (Warm Room / Counter)</strong>
+                    </div>
+                    <input type="range" id="danger-temp-slider" min="0" max="75" step="1" value="32" aria-label="Storage temperature in Celsius" />
+                    <div class="danger-temp-ticks">
+                      <span>❄️ 4°C Fridge</span>
+                      <span style="color:#f0655b;">⚠️ 5°C–60°C Danger Zone</span>
+                      <span>🔥 75°C Cooked</span>
+                    </div>
+                  </div>
+
+                  <div class="danger-slider-group">
+                    <div class="danger-slider-meta">
+                      <span>Time Left Unrefrigerated</span>
+                      <strong id="danger-time-label">3.0 Hours</strong>
+                    </div>
+                    <input type="range" id="danger-time-slider" min="0" max="6" step="0.5" value="3" aria-label="Time elapsed in hours" />
+                  </div>
+                </div>
+
+                <div class="danger-petri-stage">
+                  <div class="petri-dish" id="petri-dish" aria-hidden="true">
+                    <!-- Colony dots rendered by app.js -->
+                  </div>
+                  <div class="danger-metrics">
+                    <div class="danger-metric-box">
+                      <span class="dm-lbl">ESTIMATED BACTERIA (FROM 1 CELL)</span>
+                      <span class="dm-val" id="danger-bacteria-count">512</span>
+                      <span class="dm-sub" id="danger-doubling-note">Doubles every ~20 mins in peak Danger Zone</span>
+                    </div>
+                    <p class="danger-explain" id="danger-explain-text">
+                      Leaving cooked food or dairy at 32°C for 3 hours allows rapid pathogen multiplication. Refrigerate below 5°C within 2 hours!
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===============================================================
+               SUB-SECTION 06 · CONCLUSION & NEXT STEPS (WAY FORWARD)
+               =============================================================== -->
+          <div class="survey-subblock" id="survey-part-06">
+            <div class="survey-subhead">
+              <span class="survey-step-num">06</span>
+              <div>
+                <span class="survey-step-eyebrow">CONCLUSION &amp; NEXT STEPS</span>
+                <h4 class="survey-step-title">Empirical Conclusion &amp; The Way Forward</h4>
+              </div>
+            </div>
+
+            <div class="survey-conclusion-banner">
+              <div class="conclusion-icon">🔬</div>
+              <div>
+                <h5>Study Conclusion</h5>
+                <p>
+                  “The survey provides a data-based view of everyday food and hygiene habits among 55 respondents.
+                  The results highlight that <strong>food safety depends not only on awareness, but on consistently following safe practices every single day</strong> — especially separating raw and cooked food, checking expiry dates, safe storage, and evaluating outside food hygiene.”
+                </p>
+              </div>
+            </div>
+
+            <h5 class="chart-title" style="margin-top: 1.35rem;">Way Forward — 8 Practical Recommendations</h5>
+            <div class="way-forward-8grid">
+              <div class="wf-card"><span class="wf-num">01</span><span>Wash hands regularly with soap &amp; clean water</span></div>
+              <div class="wf-card"><span class="wf-num">02</span><span>Wash fruits and vegetables thoroughly under running water</span></div>
+              <div class="wf-card"><span class="wf-num">03</span><span>Keep cooked and stored food covered at all times</span></div>
+              <div class="wf-card"><span class="wf-num">04</span><span>Separate raw and cooked food using distinct boards/containers</span></div>
+              <div class="wf-card"><span class="wf-num">05</span><span>Store perishable food safely below 5°C promptly</span></div>
+              <div class="wf-card"><span class="wf-num">06</span><span>Check expiry / use-by information before purchase &amp; use</span></div>
+              <div class="wf-card"><span class="wf-num">07</span><span>Maintain clean utensils, knives, and kitchen surfaces</span></div>
+              <div class="wf-card"><span class="wf-num">08</span><span>Follow strict hygiene checks while eating outside</span></div>
+            </div>
+
+            <div class="survey-cta-strip">
+              <div>
+                <h5>Want to improve your everyday food-hygiene habits?</h5>
+                <p>Explore our interactive 3-Level FoodSafe Guide or test your knowledge in the 11-Question Awareness Quiz.</p>
+              </div>
+              <div class="survey-cta-btns">
+                <a href="#lab-guide" class="btn-vermilion-sm">Explore FoodSafe Guide ↑</a>
+                <a href="#lab-quiz" class="btn-glass-sm">Take the Awareness Quiz ↑</a>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -1134,6 +1483,113 @@
     </div>
 
 </main>
+
+<!-- =========================================================================
+     NCSC JURY EXECUTIVE BRIEF & 2-MINUTE GUIDED PITCH WALKTHROUGH MODAL
+     ========================================================================= -->
+<div class="jury-modal-backdrop" id="jury-modal-backdrop" hidden aria-modal="true" role="dialog" aria-labelledby="jury-modal-title">
+  <div class="jury-modal-card">
+    <div class="jury-modal-header">
+      <div>
+        <span class="panel-eyebrow">NATIONAL CHILDREN’S SCIENCE CONGRESS (NCSC 2026–27)</span>
+        <h3 class="panel-title" id="jury-modal-title">📋 NCSC Jury Executive Brief &amp; Guided Walkthrough</h3>
+      </div>
+      <div class="jury-modal-top-btns">
+        <div class="jury-tab-strip" role="tablist">
+          <button type="button" class="jury-tab is-active" data-jury-tab="abstract">📄 1-Page Executive Abstract</button>
+          <button type="button" class="jury-tab" data-jury-tab="pitch">⏱️ 2-Min Guided Pitch Deck</button>
+        </div>
+        <button type="button" class="btn-glass-sm" id="btn-print-jury-brief" title="Print or Save as PDF">🖨️ Print / PDF</button>
+        <button type="button" class="btn-vermilion-sm" id="btn-close-jury-modal" aria-label="Close Jury Brief">✕ Close</button>
+      </div>
+    </div>
+
+    <!-- TAB 1: 1-PAGE PRINTABLE NCSC EXECUTIVE ABSTRACT -->
+    <div class="jury-tab-pane" id="jury-pane-abstract">
+      <div class="abstract-meta-grid">
+        <div class="abstract-meta-box">
+          <span>PROJECT TITLE</span>
+          <strong>Food and Hygiene Habits Amongst People: Survey, Analysis &amp; Awareness Study</strong>
+        </div>
+        <div class="abstract-meta-box">
+          <span>RESEARCH DESIGN</span>
+          <strong>Primary Questionnaire Survey (n = 55) + Digital Intervention Platform</strong>
+        </div>
+        <div class="abstract-meta-box">
+          <span>FOCAL AREA</span>
+          <strong>Public Health, Nutrition, Clean Water &amp; Food Hygiene</strong>
+        </div>
+      </div>
+
+      <div class="abstract-2col">
+        <div class="abstract-col">
+          <h4>1. Research Objectives &amp; Methodology</h4>
+          <p>
+            To evaluate everyday food-hygiene practices across five age cohorts (<strong>n = 55</strong>: 13–17 yrs 25.5%, 18–25 yrs 29.1%, 26–40 yrs 23.6%, 41–60 yrs 16.4%, 60+ yrs 5.5%) and identify the gap between general hygiene awareness and consistent daily execution.
+          </p>
+
+          <h4 style="margin-top:0.9rem;">2. Two Major Problems Identified</h4>
+          <ul>
+            <li><strong>Problem 01 — Lack of Awareness:</strong> Critical invisible-risk practices have low consistent adoption: <em>Separating raw &amp; cooked food</em> (<strong>43.6%</strong>), <em>Hygiene while eating outside</em> (<strong>49.1%</strong>), and <em>Checking expiry dates</em> (<strong>52.7%</strong>).</li>
+            <li><strong>Problem 02 — Inconsistent Hygiene Practices:</strong> Up to <strong>30.9%</strong> follow key habits only <em>“Sometimes”</em>, leaving 4 of 8 core habits below the 60% consistency mark.</li>
+          </ul>
+        </div>
+
+        <div class="abstract-col">
+          <h4>3. Empirical Survey Summary Table (n = 55)</h4>
+          <table class="jury-data-table">
+            <thead>
+              <tr>
+                <th>Practice Assessed</th>
+                <th>Yes</th>
+                <th>Sometimes</th>
+                <th>No</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1. Handwashing before food</td><td><strong>43 (78.2%)</strong></td><td>8 (14.5%)</td><td>4 (7.3%)</td></tr>
+              <tr><td>2. Keeping cooked food covered</td><td><strong>41 (74.5%)</strong></td><td>10 (18.2%)</td><td>4 (7.3%)</td></tr>
+              <tr><td>3. Clean utensils / surfaces</td><td><strong>39 (70.9%)</strong></td><td>11 (20.0%)</td><td>5 (9.1%)</td></tr>
+              <tr><td>4. Washing fruits &amp; vegetables</td><td><strong>37 (67.3%)</strong></td><td>13 (23.6%)</td><td>5 (9.1%)</td></tr>
+              <tr><td>5. Safe storage of perishables</td><td><strong>31 (56.4%)</strong></td><td>14 (25.5%)</td><td>10 (18.2%)</td></tr>
+              <tr><td>6. Checking expiry / use-by</td><td><strong>29 (52.7%)</strong></td><td>15 (27.3%)</td><td>11 (20.0%)</td></tr>
+              <tr><td>7. Hygiene eating outside</td><td><strong>27 (49.1%)</strong></td><td>16 (29.1%)</td><td>12 (21.8%)</td></tr>
+              <tr><td>8. Separating raw &amp; cooked</td><td><strong>24 (43.6%)</strong></td><td>17 (30.9%)</td><td>14 (25.5%)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="abstract-footer-note">
+        <strong>Conclusion &amp; Digital Intervention:</strong> Food safety depends not only on awareness, but on converting “Sometimes” habits into daily routines. This FoodSafe platform translates the survey findings into 8 practical recommendations, interactive simulations, a 3-Level Guide, an 11-Question Quiz, and a 7-Day Habit Challenge.
+      </div>
+    </div>
+
+    <!-- TAB 2: 2-MINUTE GUIDED PITCH WALKTHROUGH (5 SLIDES FOR EXHIBITION / JURY) -->
+    <div class="jury-tab-pane" id="jury-pane-pitch" hidden>
+      <div class="pitch-slide-card" id="pitch-slide-card">
+        <div class="pitch-slide-top">
+          <span class="panel-badge" id="pitch-step-badge">SLIDE 01 / 05</span>
+          <span class="pitch-time-tag" id="pitch-time-tag">⏱️ 0:00 – 0:25 · THE PROBLEM</span>
+        </div>
+        <h4 class="pitch-slide-title" id="pitch-slide-title">1. Why Food Hygiene Matters Globally &amp; Locally</h4>
+        <p class="pitch-slide-body" id="pitch-slide-body">
+          According to the WHO, over 866 million foodborne illnesses and 1.52 million deaths occur globally every year. Yet foodborne disease is almost entirely preventable—because food safety is a 5-stage chain (Preparation → Cooking → Storage → Serving → Consumption) driven by everyday household habits.
+        </p>
+        <div class="pitch-talking-point" id="pitch-talking-point">
+          <strong>🎤 Presenter Talking Point:</strong> “Judges, our study asks a simple question: If people know clean food matters, why do foodborne illnesses still happen at home and outside?”
+        </div>
+        <div class="pitch-slide-actions">
+          <div class="pitch-nav-btns">
+            <button type="button" class="btn-glass-sm" id="pitch-prev-btn">← Previous Slide</button>
+            <button type="button" class="btn-vermilion-sm" id="pitch-next-btn">Next Slide →</button>
+          </div>
+          <a href="#prologue" class="btn-glass-sm" id="pitch-jump-link">↗ Show This Section on Page</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script src="inner-green-assets/three.min.js"></script>
 <script src="./sylva-hero.js"></script>
