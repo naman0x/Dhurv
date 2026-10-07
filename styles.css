@@ -4208,6 +4208,175 @@ html {
 }
 
 /* ============================================================================
+   DEDICATED ABOUT SECTION : NCSC PROJECT & RESEARCH TEAM CREDITS (#about)
+   ============================================================================ */
+.about-project-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.about-header {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.about-title-banner {
+  padding: 1.35rem 1.5rem;
+  background: linear-gradient(135deg, rgba(142, 201, 71, 0.18) 0%, rgba(20, 26, 17, 0.92) 100%);
+  border: 1px solid rgba(142, 201, 71, 0.48);
+  border-radius: 12px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.about-title-tag {
+  display: inline-block;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: var(--accent-shoji);
+  padding: 0.25rem 0.65rem;
+  background: rgba(142, 201, 71, 0.2);
+  border: 1px solid rgba(142, 201, 71, 0.45);
+  border-radius: 99px;
+  margin-bottom: 0.6rem;
+}
+
+.about-project-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.2vw, 1.85rem);
+  font-weight: 600;
+  color: var(--text-ivory);
+  line-height: 1.25;
+  margin: 0 0 0.55rem;
+}
+
+.about-project-summary {
+  font-size: 0.86rem;
+  color: var(--text-silver);
+  line-height: 1.56;
+  margin: 0;
+}
+
+.about-team-3grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.1rem;
+}
+
+.about-member-card {
+  padding: 1.25rem 1.35rem;
+  background: rgba(20, 25, 17, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-top: 3px solid var(--accent-shoji);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  transition: transform 0.22s ease, border-color 0.22s ease;
+}
+
+.about-member-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-vermilion);
+}
+
+.about-member-card.is-leader {
+  border-top-color: #8ec947;
+  background: linear-gradient(180deg, rgba(142, 201, 71, 0.12) 0%, rgba(20, 25, 17, 0.88) 100%);
+}
+
+.about-member-card.is-guide {
+  border-top-color: #e6c259;
+  background: linear-gradient(180deg, rgba(230, 194, 89, 0.12) 0%, rgba(20, 25, 17, 0.88) 100%);
+}
+
+.member-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.member-role-badge {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--accent-vermilion);
+}
+
+.about-member-card.is-guide .member-role-badge {
+  color: #e6c259;
+}
+
+.member-class-tag {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-ivory);
+}
+
+.member-name {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-ivory);
+  margin: 0;
+}
+
+.member-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-shoji);
+  margin: 0 0 0.25rem;
+}
+
+.member-bio {
+  font-size: 0.78rem;
+  color: var(--text-silver);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.about-details-4grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.85rem;
+}
+
+.about-detail-box {
+  padding: 0.95rem 1.05rem;
+  background: rgba(16, 21, 13, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+}
+
+.ad-lbl {
+  font-size: 0.56rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: var(--accent-vermilion);
+}
+
+.about-detail-box strong {
+  font-size: 0.84rem;
+  color: var(--text-ivory);
+}
+
+.about-detail-box p {
+  font-size: 0.73rem;
+  color: var(--text-silver);
+  line-height: 1.42;
+  margin: 0;
+}
+
+/* ============================================================================
    RESPONSIVE BREAKPOINTS & PRINT LAYOUT
    ============================================================================ */
 @media (max-width: 1024px) {
@@ -4217,6 +4386,7 @@ html {
   .survey-charts-grid,
   .problems-2grid,
   .abstract-2col,
+  .about-team-3grid,
   .poster-studio-grid,
   .rituals-header,
   .gardens-bento {
@@ -4226,7 +4396,8 @@ html {
   .survey-overview-grid,
   .findings-4grid,
   .mistakes-4grid,
-  .way-forward-8grid {
+  .way-forward-8grid,
+  .about-details-4grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -4265,6 +4436,7 @@ html {
   .findings-4grid,
   .mistakes-4grid,
   .way-forward-8grid,
+  .about-details-4grid,
   .abstract-meta-grid,
   .challenge-7grid,
   .slogan-wall-grid,

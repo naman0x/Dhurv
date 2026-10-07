@@ -1494,7 +1494,8 @@
       const data = getActiveSurveyDataset();
       const N = Math.max(1, data.total);
       const lines = [
-        'NCSC 2026-27 EMPIRICAL SURVEY DATASET - FOOD & HYGIENE HABITS AMONGST PEOPLE',
+        'NCSC 2026-27 PROJECT: "Food and Hygiene Habits amongst people : Survey and Analysis"',
+        'Group Leader: Dhruv (Class XI) | Group Member: Gaurav (Class XI) | Guide Teacher: Mrs. Rajani Jain',
         `Total Respondents (n),${N}`,
         '',
         'PART 1: RESPONDENT AGE-GROUP DISTRIBUTION',
@@ -1848,7 +1849,7 @@
     });
   }
 
-  // Keyboard shortcuts 1–6 for instant smooth presentation navigation
+  // Keyboard shortcuts 1–7 for instant smooth presentation navigation
   const KEY_TARGETS = {
     '1': '#hero',
     '2': '#prologue',
@@ -1856,6 +1857,7 @@
     '4': '#survey-live-sim',
     '5': '#lab-quiz',
     '6': '#lab-challenge',
+    '7': '#about',
   };
 
   window.addEventListener('keydown', (e) => {
